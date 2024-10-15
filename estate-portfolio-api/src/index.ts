@@ -9,6 +9,7 @@ import path from "path";
 import { connectDB } from "./config/dbConn";
 import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./middlewares/credentials";
+import { logger } from "./middlewares/logEvents";
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ const PORT: Number = parseInt(process.env.PORT as string, 10) || 4040;
 connectDB();
 
 const app: Express = express();
+
+// custom middleware logger
+app.use(logger);
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
