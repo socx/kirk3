@@ -2,30 +2,40 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import path from "path";
 
 import { connectDB } from "./config/dbConn";
+import { corsOptions } from "./config/corsOptions";
+import { credentials } from "./middlewares/credentials";
 
 dotenv.config();
 
-const PORT: Number = parseInt(process.env.PORT as string, 10) || 3535;
+const PORT: Number = parseInt(process.env.PORT as string, 10) || 4040;
 
 // Connect to DB
 connectDB();
 
 const app: Express = express();
 
-// built-in middleware for json 
-app.use(express.json())
-
-app.use(bodyParser.json());
-
-// built-in middleware to handle urlencoded form data
-app.use(express.urlencoded({extended : true}))
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
 
 // Cross Origin Resource Sharing
-app.use(cors())
+app.use(cors(corsOptions))
+
+// built-in middleware to handle urlencoded form data
+app.use(express.urlencoded({extended : true}));
+
+// built-in middleware for json 
+app.use(express.json());
+
+//middleware for cookies
+app.use(cookieParser());
+
+app.use(bodyParser.json());
 
 app.get("/", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/views/index.html");
