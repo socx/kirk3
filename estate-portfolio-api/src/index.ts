@@ -10,6 +10,7 @@ import { connectDB } from "./config/dbConn";
 import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./middlewares/credentials";
 import { logger } from "./middlewares/logEvents";
+import { userRouter } from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -48,6 +49,8 @@ app.get("/", (req: Request, res: Response) => {
 app.get('/server-status',  (req: Request, res: Response) => {
   res.json({ message: 'Estate Portfolio API Server is up and running' });
 });
+
+app.use('/users', userRouter);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
