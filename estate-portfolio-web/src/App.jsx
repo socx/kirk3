@@ -10,6 +10,7 @@ import './css/style.css';
 import './charts/ChartjsConfig';
 
 // Import pages
+import Login from './pages/Login';
 import TimesTableTutorials from './pages/maths-tutorials/TimesTableTutorials';
 
 
@@ -57,7 +58,6 @@ import Roadmap from './pages/utility/Roadmap';
 import Faqs from './pages/utility/Faqs';
 import EmptyState from './pages/utility/EmptyState';
 import PageNotFound from './pages/utility/PageNotFound';
-import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 import ResetPassword from './pages/ResetPassword';
 import Onboarding01 from './pages/Onboarding01';
@@ -93,7 +93,7 @@ function App() {
       <Routes>
         <Route path="/maths/times-tables/:id?" element={<TimesTableTutorials />} />
 
-        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/" element={<Login />} />
         <Route path="/dashboard/analytics" element={<Analytics />} />
         <Route path="/dashboard/fintech" element={<Fintech />} />
         <Route path="/ecommerce/customers" element={<Customers />} />
@@ -137,7 +137,7 @@ function App() {
         <Route path="/utility/faqs" element={<Faqs />} />
         <Route path="/utility/empty-state" element={<EmptyState />} />
         <Route path="/utility/404" element={<PageNotFound />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/Login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/onboarding-01" element={<Onboarding01 />} />

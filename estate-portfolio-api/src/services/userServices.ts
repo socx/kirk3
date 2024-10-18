@@ -32,7 +32,7 @@ export const createUser = async (fullname: string, email: string, password: stri
 
   const newUser = await UserModel.create({
     fullname,
-    email,
+    email: email.toLowerCase(),
     password: hashedPassword,
   });
   return getUserFromModel(newUser.toObject());
@@ -49,7 +49,8 @@ export const activateUser = async (_id: string, email: string) : Promise<User | 
 }
 
 export const authenticate = async (email: string, password: string): Promise<AuthenticatedUser | undefined> => {
-  const user = await UserModel.findOne({ email });
+  const lowerCaseEmail = email.toLowerCase();
+  const user = await UserModel.findOne({ email: lowerCaseEmail });
   if (!user || !user.activatedAt || user.deletedAt)  {
     return;
   }
