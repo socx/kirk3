@@ -33,7 +33,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);debugger
+    setIsLoading(true);
     const response = await login({email, password});
     setIsLoading(false);
     if (response.user) {
@@ -46,7 +46,7 @@ const Login = () => {
     }
   }
 
-  const getUserDestination = (user) => {
+  const getUserDestination = () => {
     let destination = location.state?.from?.pathname;
     if(destination) {
       return destination;
