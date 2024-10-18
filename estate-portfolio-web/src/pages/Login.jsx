@@ -19,11 +19,9 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
   const [toastErrorOpen, setToastErrorOpen] = useState(true);
 
-  // const [appVersion, setAppVersion] = useState('');
 
   useEffect(() => {
     emailRef.current.focus();
@@ -132,8 +130,8 @@ const Login = () => {
               <div className="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
                 <div className="text-sm">
                   Don’t you have an account?{" "}
-                  <Link className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" to="/signup">
-                    Sign Up
+                  <Link className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" to="/register">
+                    Register Free
                   </Link>
                 </div>
               </div>
