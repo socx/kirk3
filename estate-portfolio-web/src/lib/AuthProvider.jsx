@@ -6,7 +6,23 @@ import { getBaseUrl, API_ROUTES } from "../lib/constants";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({});debugger
+  const [auth, setAuth] = useState({});
+
+  const register = async ({ email, password, fullname }) => {
+    try {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, fullname }),
+      };
+      
+      const registerPromise = await fetch(`${getBaseUrl()}${API_ROUTES.REGISTER}`, requestOptions);
+      const json = await registerPromise.json();
+      return json;
+    } catch (error) {
+      return { message: 'Server error' };
+    }
+  }
 
   const login = async ({email, password}) => {
     try {
@@ -34,9 +50,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo( () => ({
-    auth, setAuth, login, logout,
+    auth, register, setAuth, login, logout,
   }), [auth]);
-debugger
+
   return (
     <AuthContext.Provider value={value}>
       {children}
