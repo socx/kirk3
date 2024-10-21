@@ -4,7 +4,7 @@ import { validateToken } from "../middlewares/validateTokenHandler";
 export const userRouter = express.Router();
 
 userRouter.post("/register", registerUser);
-userRouter.patch("/:email/activate-user", completeUserSignUp);
+userRouter.patch("/activate-user", completeUserSignUp);
 userRouter.post("/authenticate", loginUser);
 userRouter.post("/refresh-token", refreshToken);
 userRouter.get("/logout", logoutUser);
