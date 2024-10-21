@@ -10,6 +10,7 @@ import './css/style.css';
 import './charts/ChartjsConfig';
 
 // Import pages
+import ActivateUserAccount from './pages/ActivateUserAccount';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import TimesTableTutorials from './pages/maths-tutorials/TimesTableTutorials';
@@ -95,6 +96,7 @@ function App() {
         <Route path="/maths/times-tables/:id?" element={<TimesTableTutorials />} />
 
         <Route exact path="/" element={<Login />} />
+        <Route exact path="/activate-user-account" element={<ActivateUserAccount />} />
         <Route exact path="/register" element={<Register />} />
 
         <Route path="/dashboard/analytics" element={<Analytics />} />

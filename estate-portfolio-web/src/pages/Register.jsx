@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect }  from 'react';
 import { Link } from 'react-router-dom';
 
-import { getBaseUrl, API_ROUTES } from '../lib/constants';
 import useAuth from '../hooks/useAuth';
 
 import PublicHeader from '../components/PublicHeader';

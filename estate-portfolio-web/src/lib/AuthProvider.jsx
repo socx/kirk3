@@ -1,6 +1,7 @@
 import { createContext, useState, useMemo } from "react";
 
-import { getBaseUrl, API_ROUTES } from "../lib/constants";
+import { API_ROUTES } from "../lib/constants";
+import { getBaseUrl } from "./axios";
 
 
 const AuthContext = createContext({});
