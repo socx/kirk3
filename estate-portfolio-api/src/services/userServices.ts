@@ -43,9 +43,17 @@ export const findUserByEmail = async (email: string) => {
   return user ? getUserFromModel(user?.toObject()) : null;
 }
 
-export const activateUser = async (_id: string, email: string) : Promise<User | null> => {
-  const modelUser = await UserModel.findOneAndUpdate({ email, _id }, { activatedAt: Date.now() }, { new: true });
-  return modelUser ? getUserFromModel(modelUser.toJSON()) : null;
+export const activateUser = async (token: string) : Promise<User | null> => {
+  const verified: unknown = jwt.verify(token, (<Secret>process.env.ACCESS_TOKEN_SECRET));
+  if (verified && hasOwnProperty(verified, 'email')) {
+    const email = verified.email;
+    const modelUser = await UserModel.findOneAndUpdate({ email }, { activatedAt: Date.now(), updatedAt: Date.now() }, { new: true });
+    if (!modelUser)  {
+      throw new Error("User not found");
+    }
+    return getUserFromModel(modelUser);
+  }
+  return null;
 }
 
 export const authenticate = async (email: string, password: string): Promise<AuthenticatedUser | undefined> => {
@@ -126,7 +134,7 @@ export const clearToken = async (refreshToken: string): Promise<User | undefined
   return getUserFromModel(loggedOutUser);
 };
 
-export const generatePasswordResetToken = async (email: string) => {
+export const generateAccessToken = async (email: string) => {
   return jwt.sign({ email, expiry: dayjs().add(1, 'hour') }, (<Secret>process.env.ACCESS_TOKEN_SECRET), {
     expiresIn: '1 hour'
   });

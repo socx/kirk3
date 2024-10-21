@@ -10,7 +10,7 @@ import {
   fetchUser,
   findUserByEmail,
   findUserByEmailAndUpdatePassword,
-  generatePasswordResetToken,
+  generateAccessToken,
   refreshAccessToken,
   updateUser,
 } from "../services/userServices";
@@ -35,9 +35,11 @@ export const registerUser = async (req: Request, res: Response) => {
     const permissions = defaultUserPermissions?.split("|");
     updateUser(user.id, { permissions });
     // send notification email
+    const token = await generateAccessToken(email);
     const emailDetails : EmailDetails = {
       user,
       templateType: EmailTemplateTypes.UserRegistrationNotification,
+      token,
     };
     sendEmail(emailDetails);
 
@@ -49,9 +51,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const completeUserSignUp = async (req: Request, res: Response) => {
   try {
-    const { email } = req.params;
     const { token } = req.body;
-    const user = await activateUser(token, email);
+    const user = await activateUser(token);
     if (user) {
       const emailDetails : EmailDetails = {
         user,
@@ -140,7 +141,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const initiatePasswordReset = async (req: Request, res: Response) => {
   const { email } = req.body;
-  const token = await generatePasswordResetToken(email);
+  const token = await generateAccessToken(email);
   const user = await findUserByEmail(email);
   if(user) {
     const emailDetails : EmailDetails = {

@@ -81,7 +81,7 @@ export const sendEmail = (emailDetails: EmailDetails) => {
 
 const populateTemplate = (template: string, emailDetails: EmailDetails) => {
   const { user, token, } = emailDetails;
-  const signUpUrl = `${process.env.APP_BASE_URL}/complete-sign-up?token=${user.id}&email=${user.email}`;
+  const signUpUrl = `${process.env.APP_BASE_URL}/activate-user-account?token=${token}`;
   const loginUrl = `${process.env.APP_BASE_URL}/signin`;
   const changePasswordUrl = `${process.env.APP_BASE_URL}/change-password?token=${token}`;
   const privacyPolicyUrl = `${process.env.APP_BASE_URL}/privacy-policy`;
