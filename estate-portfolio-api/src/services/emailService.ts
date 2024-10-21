@@ -81,10 +81,10 @@ export const sendEmail = (emailDetails: EmailDetails) => {
 
 const populateTemplate = (template: string, emailDetails: EmailDetails) => {
   const { user, token, } = emailDetails;
-  const signUpUrl = `${process.env.APP_BASE_URL}/activate-user-account?token=${token}`;
-  const loginUrl = `${process.env.APP_BASE_URL}/signin`;
-  const changePasswordUrl = `${process.env.APP_BASE_URL}/change-password?token=${token}`;
-  const privacyPolicyUrl = `${process.env.APP_BASE_URL}/privacy-policy`;
+  const signUpUrl = `${process.env.APP_BASE_URI}/activate-user-account?token=${token}`;
+  const loginUrl = `${process.env.APP_BASE_URI}/signin`;
+  const changePasswordUrl = `${process.env.APP_BASE_URI}/change-password?token=${token}`;
+  const privacyPolicyUrl = `${process.env.APP_BASE_URI}/privacy-policy`;
     
   return template
     .replace(/\[\[APP_NAME\]\]/gi, process.env.APP_NAME as string)
