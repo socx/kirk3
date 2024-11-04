@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
       if (authenticatePromise.ok) {
         setAuth({ user: json.user });
         // TODO: Store in cookie
+        localStorage.setItem('auth', JSON.stringify(json));
         return json;
       }
       return json;
@@ -47,11 +48,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     setAuth({...auth, user: null});
-    await fetch(`${getBaseUrl()}${API_ROUTES.LOGOUT}`, { cache: 'no-store' })
+    localStorage.removeItem("auth");
+    await fetch(`${getBaseUrl()}${API_ROUTES.LOGOUT}`, { cache: 'no-store' });
   };
 
   const value = useMemo( () => ({
-    auth, register, setAuth, login, logout,
+    auth, login, logout, register, setAuth,
   }), [auth]);
 
   return (
