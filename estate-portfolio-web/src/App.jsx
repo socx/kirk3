@@ -11,7 +11,9 @@ import './css/style.css';
 
 // Import pages
 import ActivateUserAccount from './pages/ActivateUserAccount';
+import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Onboarding from './pages/Onboarding';
 import PageNotFound from './pages/PageNotFound';
 import Register from './pages/Register';
 
@@ -30,14 +32,17 @@ function App() {
   return (
     <>
       <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/activate-user-account" element={<ActivateUserAccount />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/utility/404" element={<PageNotFound />} />
 
-        <Route exact path="/" element={<Login />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/activate-user-account" element={<ActivateUserAccount />} />
-        <Route exact path="/register" element={<Register />} />
-        
-        <Route exact path="/utility/404" element={<PageNotFound />} />
-        <Route path="*" element={<PageNotFound />} />
+          <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/onboarding" element={<Onboarding />} />
+
+
+          <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );

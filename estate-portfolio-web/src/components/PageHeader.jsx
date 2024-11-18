@@ -1,5 +1,8 @@
 import React, { useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { version } from '../../package.json';
+
+import useAuth from '../hooks/useAuth';
 
 import UserMenu from '../components/DropdownProfile';
 import ThemeToggle from '../components/ThemeToggle';
@@ -10,11 +13,21 @@ function PageHeader({
   variant = 'default',
 }) {
 
+  const { getToken, logout, } = useAuth();
+  const navigate = useNavigate();
+
   const [appVersion, setAppVersion] = useState('');
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     setAppVersion(version);
-  }, [])
+    const token = getToken()
+    if (token) {
+      setUser(JSON.parse(token));
+    } else {
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <header className={`sticky top-0 before:absolute before:inset-0 before:backdrop-blur-md max-lg:before:bg-white/90 dark:max-lg:before:bg-gray-800/90 before:-z-10 z-30 ${variant === 'v2' || variant === 'v3' ? 'before:bg-white after:absolute after:h-px after:inset-x-0 after:top-full after:bg-gray-200 dark:after:bg-gray-700/60 after:-z-10' : 'max-lg:shadow-sm lg:before:bg-gray-100/90 dark:lg:before:bg-gray-900/90'} ${variant === 'v2' ? 'dark:before:bg-gray-800' : ''} ${variant === 'v3' ? 'dark:before:bg-gray-900' : ''}`}>
@@ -47,7 +60,7 @@ function PageHeader({
             <ThemeToggle />
             {/*  Divider */}
             <hr className="w-px h-6 bg-gray-200 dark:bg-gray-700/60 border-none" />
-            <UserMenu align="right" />
+            <UserMenu align="right" logout={logout} user={user} />
 
           </div>
 

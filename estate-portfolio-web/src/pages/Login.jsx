@@ -47,12 +47,8 @@ const Login = () => {
   }
 
   const getUserDestination = () => {
-    let destination = location.state?.from?.pathname;
-    if(destination) {
-      return destination;
-    } else {
-      return '/dashboard';
-    }
+    const destination = location.state?.from?.pathname;
+    return destination ? destination : '/onboarding';
   }
 
   return (

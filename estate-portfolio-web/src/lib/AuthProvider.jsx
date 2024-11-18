@@ -36,14 +36,17 @@ export const AuthProvider = ({ children }) => {
       const json = await authenticatePromise.json();
       if (authenticatePromise.ok) {
         setAuth({ user: json.user });
-        // TODO: Store in cookie
-        localStorage.setItem('auth', JSON.stringify(json));
+        localStorage.setItem('auth', JSON.stringify(json.user));
         return json;
       }
       return json;
     } catch (error) {
       return { message: 'Server error' };
     }
+  }
+
+  const getToken = () => {
+    return localStorage.getItem('auth');
   }
 
   const logout = async () => {
@@ -53,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const value = useMemo( () => ({
-    auth, login, logout, register, setAuth,
+    auth, getToken, login, logout, register, setAuth,
   }), [auth]);
 
   return (
