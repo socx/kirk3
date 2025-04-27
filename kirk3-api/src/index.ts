@@ -16,7 +16,7 @@ import { assetRouter } from "./routes/assetRoutes";
 
 dotenv.config();
 
-const PORT: Number = parseInt(process.env.PORT as string, 10) || 4040;
+const PORT: Number = parseInt(process.env.PORT as string, 10) || 3030;
 
 // Connect to DB
 connectDB();
