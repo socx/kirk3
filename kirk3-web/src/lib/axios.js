@@ -8,7 +8,7 @@ export const getBaseUrl = () => {
       break;
     case 'development':
     default:
-      url = 'http://localhost:4040';
+      url = 'http://localhost:3030';
   }
   return url;
 }
