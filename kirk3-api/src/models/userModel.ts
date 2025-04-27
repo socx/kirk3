@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+export const UserSchema = new mongoose.Schema(
   {
     fullname: {
       type: String,
@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      lowercase: true,
     },
     password: {
       type: String,

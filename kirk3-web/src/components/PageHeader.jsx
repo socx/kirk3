@@ -23,7 +23,7 @@ function PageHeader({
     setAppVersion(version);
     const token = getToken()
     if (token) {
-      setUser(JSON.parse(token));
+      setUser(token);
     } else {
       navigate('/login');
     }

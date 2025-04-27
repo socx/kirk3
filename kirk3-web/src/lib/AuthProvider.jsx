@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const getToken = () => {
-    return localStorage.getItem('auth');
+    return JSON.parse(localStorage.getItem('auth'));
   }
 
   const logout = async () => {

@@ -4,7 +4,7 @@ export const getBaseUrl = () => {
   let url;
   switch(process.env.NODE_ENV) {
     case 'production':
-      url = 'https://estate-portfolio-api.onrender.com';
+      url = 'https://kirk-api.onrender.com';
       break;
     case 'development':
     default:

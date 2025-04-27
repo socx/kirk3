@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
+import { API_ROUTES, } from '../lib/constants';
+import { axiosPrivate, } from '../lib/axios';
 import useAuth from '../hooks/useAuth';
 
 import AuthImage from "../images/sign-in-01.png";
@@ -9,7 +11,7 @@ import PublicHeader from '../components/PublicHeader';
 import Toast from '../components/Toast';
 
 const Login = () => {
-  const { login } = useAuth();
+  const { getToken, login } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,16 +41,17 @@ const Login = () => {
     if (response.user) {
       setEmail('');
       setPassword('');
-      const navigateTo = getUserDestination(response.user);
+      const responseProperties = await axiosPrivate(getToken().accessToken).get(API_ROUTES.GET_USER_ASSETS);
+      const navigateTo = getUserDestination(responseProperties.data.assets.length);
       navigate(navigateTo, { replace: true });
     } else {
       setErrorMsg(response.message);
     }
   }
 
-  const getUserDestination = () => {
+  const getUserDestination = (numberOfProperties) => {
     const destination = location.state?.from?.pathname;
-    return destination ? destination : '/onboarding';
+    return destination ? destination :  (numberOfProperties > 0 ? '/dashboard' : '/onboarding');
   }
 
   return (
