@@ -12,7 +12,6 @@ import { credentials } from "./middlewares/credentials";
 import { logger } from "./middlewares/logEvents";
 
 import { userRouter } from "./routes/userRoutes";
-import { assetRouter } from "./routes/assetRoutes";
 
 dotenv.config();
 
@@ -53,7 +52,6 @@ app.get('/server-status',  (req: Request, res: Response) => {
 });
 
 app.use('/users', userRouter);
-app.use('/assets', assetRouter);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
