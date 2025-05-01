@@ -1,12 +1,15 @@
 ### Health check
 GET http://localhost:3001/status HTTP/1.1
 
+### Get all Users
+GET http://localhost:3001/users HTTP/1.1
+
 ### Create User
-POST http://localhost:3001/users/create HTTP/1.1
+POST http://localhost:3001/users/register HTTP/1.1
 content-type: application/json
 
 {
-    "fullname": "sample",
-    "email" : "man@sample.com",
+    "fullname": "baby sample",
+    "email" : "baby@sample.com",
     "password": "securepassword"
 }

@@ -9,11 +9,11 @@ import {
 } from "sequelize-typescript";
 
 interface UserAttributes {
-  id?: number;
+  id?: string;
   fullname: string;
   email: string;
   password: string;
-
+  activatedAt?: Date; 
 }
 
 interface UserCreationAttributes extends
@@ -24,7 +24,7 @@ interface UserCreationAttributes extends
   tableName: "users",
   modelName: "User",
 })
-export class User extends Model <
+export class UserModel extends Model <
   UserAttributes,
   UserCreationAttributes
 > {
@@ -53,10 +53,16 @@ export class User extends Model <
   })
   declare password: string;
 
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  declare activatedAt: Date;
+
   @CreatedAt
-  declare created_at: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
-  declare updated_at: Date;
+  declare updatedAt: Date;
 
 }

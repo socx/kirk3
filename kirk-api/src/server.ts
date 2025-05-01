@@ -1,18 +1,17 @@
-import express, { Request, Response } from "express";
+import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
 import path  from"path";
 import dotenv from "dotenv";
-import { StatusCodes } from "http-status-codes";
 
-import { User } from "./database/models/User";
+import { userRouter } from "./routes/userRoutes";
 
 
 dotenv.config();
 
 export const createServer = () => {
-  const app = express();
+  const app: Express = express();
   app
     .disable("x-powered-by")
     .use(morgan("dev"))
@@ -29,11 +28,7 @@ export const createServer = () => {
     res.json({ message: 'Server is up and running' });
   });
 
-  app.post("/users/create", async (req: Request, res: Response) => {
-    const { fullname, email, password, } = req.body;
-    await User.create({ fullname, email, password, })
-    res.status(StatusCodes.CREATED).json({ message: `${fullname} created successfully!` });
-  });
+  app.use('/users', userRouter);
 
   app.all('*', (req: Request, res: Response) => {
     res.status(404);
