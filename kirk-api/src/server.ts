@@ -4,6 +4,10 @@ import cors from "cors";
 import morgan from "morgan";
 import path  from"path";
 import dotenv from "dotenv";
+import { StatusCodes } from "http-status-codes";
+
+import { User } from "./database/models/User";
+
 
 dotenv.config();
 
@@ -23,6 +27,12 @@ export const createServer = () => {
 
   app.get("/status", (req: Request, res: Response) => {
     res.json({ message: 'Server is up and running' });
+  });
+
+  app.post("/users/create", async (req: Request, res: Response) => {
+    const { fullname, email, password, } = req.body;
+    await User.create({ fullname, email, password, })
+    res.status(StatusCodes.CREATED).json({ message: `${fullname} created successfully!` });
   });
 
   app.all('*', (req: Request, res: Response) => {
