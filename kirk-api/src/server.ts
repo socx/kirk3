@@ -3,6 +3,9 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
 import path  from"path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const createServer = () => {
   const app = express();
