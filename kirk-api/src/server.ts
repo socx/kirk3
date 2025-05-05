@@ -6,6 +6,7 @@ import path  from"path";
 import dotenv from "dotenv";
 
 import { userRouter } from "./routes/userRoutes";
+import { permissionRouter } from "./routes/permissionRoutes";
 
 
 dotenv.config();
@@ -29,6 +30,7 @@ export const createServer = () => {
   });
 
   app.use('/users', userRouter);
+  app.use('/permissions', permissionRouter);
 
   app.all('*', (req: Request, res: Response) => {
     res.status(404);
