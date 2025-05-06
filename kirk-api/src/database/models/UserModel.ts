@@ -4,9 +4,12 @@ import {
   Model,
   Column,
   DataType,
+  HasMany,
   CreatedAt,
   UpdatedAt,
 } from "sequelize-typescript";
+
+import { UserPermissionModel } from "./UserPermissionModel";
 
 interface UserAttributes {
   id?: string;
@@ -64,5 +67,8 @@ export class UserModel extends Model <
 
   @UpdatedAt
   declare updatedAt: Date;
+
+  @HasMany(() => UserPermissionModel)
+  declare userPermissions: UserPermissionModel[];
 
 }

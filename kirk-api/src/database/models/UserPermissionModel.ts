@@ -3,7 +3,11 @@ import {
   Model,
   Column,
   DataType,
+  ForeignKey,
 } from "sequelize-typescript";
+
+import { UserModel } from "./UserModel";
+import { PermissionModel } from "./PermissionModel";
 
 interface UserPermissionAttributes {
   permissionId: string;
@@ -18,6 +22,7 @@ interface UserPermissionAttributes {
 export class UserPermissionModel extends Model <
   UserPermissionAttributes
 > {
+  // @ForeignKey(() => PermissionModel)
   @Column({
     primaryKey: true,
     type: DataType.UUID,
@@ -25,6 +30,7 @@ export class UserPermissionModel extends Model <
   })
   declare permissionId: string;
 
+  @ForeignKey(() => UserModel)
   @Column({
     primaryKey: true,
     type: DataType.UUID,

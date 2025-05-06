@@ -22,7 +22,6 @@ export const getUserPermissions = async (req: Request, res: Response) => {
 
 export const insertUserPermission = async (req: Request, res: Response) => {
   const { userId, permissionId } = req.body;
-  console.log({ userId, permissionId })
   if (!userId || !permissionId) {
     return res.status(StatusCodes.BAD_REQUEST).json({ 'message': 'userId and permissionId are required.' });
   }

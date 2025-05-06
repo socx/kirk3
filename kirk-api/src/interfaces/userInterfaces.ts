@@ -12,7 +12,7 @@ export interface BaseUser {
   updatedAt: string,
   activatedAt?: string,
   deletedAt?: string,
-  permissions?: number[],
+  userPermissions?: string[],
 }
 
 export interface User extends BaseUser {

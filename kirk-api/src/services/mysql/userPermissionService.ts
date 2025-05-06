@@ -59,3 +59,14 @@ export const deleteUserPermission = async (userId: string, permissionId: string)
     await userPermission.destroy();
   }
 }
+
+export const createMultipleUserPermissions = async (userId: string, permssionIds: string[]) => {
+  const userPermissions : UserPermission [] = [];
+  permssionIds.forEach(async (permissionId) => {
+    const userPermission = await createUserPermission(userId, permissionId);
+    if (userPermission) {
+      userPermissions.push(userPermission);
+    }
+  });
+  return userPermissions;
+}
