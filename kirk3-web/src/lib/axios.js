@@ -1,16 +1,7 @@
 import axios from 'axios';
 
 export const getBaseUrl = () => {
-  let url;
-  switch(process.env.NODE_ENV) {
-    case 'production':
-      url = 'https://kirk-api.onrender.com';
-      break;
-    case 'development':
-    default:
-      url = 'http://localhost:3030';
-  }
-  return url;
+  return import.meta.env.VITE_REACT_APP_API_BASE_URL;
 }
 
 export default axios.create({

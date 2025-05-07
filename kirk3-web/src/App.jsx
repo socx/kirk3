@@ -13,7 +13,7 @@ import './css/style.css';
 import ActivateUserAccount from './pages/ActivateUserAccount';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import Onboarding from './pages/Onboarding';
+import Welcome from './pages/Welcome';
 import PageNotFound from './pages/PageNotFound';
 import Register from './pages/Register';
 
@@ -39,7 +39,7 @@ function App() {
           <Route exact path="/utility/404" element={<PageNotFound />} />
 
           <Route exact path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/onboarding" element={<Onboarding />} />
+          <Route exact path="/welcome" element={<Welcome />} />
 
 
           <Route path="*" element={<PageNotFound />} />

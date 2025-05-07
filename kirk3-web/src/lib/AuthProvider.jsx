@@ -32,7 +32,8 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       };
-      const authenticatePromise = await fetch(`${getBaseUrl()}${API_ROUTES.LOGIN}`, requestOptions);
+      const url = `${getBaseUrl()}${API_ROUTES.LOGIN}`;
+      const authenticatePromise = await fetch(url, requestOptions);
       const json = await authenticatePromise.json();
       if (authenticatePromise.ok) {
         setAuth({ user: json.user });
@@ -52,11 +53,28 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setAuth({...auth, user: null});
     localStorage.removeItem("auth");
+    localStorage.removeItem("permissions");
     await fetch(`${getBaseUrl()}${API_ROUTES.LOGOUT}`, { cache: 'no-store' });
   };
 
+  const getUserPermissions = async (userId) => {
+    try {
+      const url = `${getBaseUrl()}${API_ROUTES.GET_USER_PERMISSIONS}/${userId}`;
+      const userPermissionsPromise = await fetch(url);
+      const json = await userPermissionsPromise.json();
+      if (userPermissionsPromise.ok) {
+        setAuth({ userPermissions: json.userPermissions });
+        localStorage.setItem('permissions', JSON.stringify(json.userPermissions));
+        return json.userPermissions;
+      }
+      return json.userPermissions;
+    } catch (error) {
+      return { message: 'Server error' };
+    }
+  }
+
   const value = useMemo( () => ({
-    auth, getToken, login, logout, register, setAuth,
+    auth, getToken, login, logout, register, setAuth, getUserPermissions,
   }), [auth]);
 
   return (

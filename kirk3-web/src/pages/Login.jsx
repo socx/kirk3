@@ -11,7 +11,7 @@ import PublicHeader from '../components/PublicHeader';
 import Toast from '../components/Toast';
 
 const Login = () => {
-  const { getToken, login } = useAuth();
+  const { getToken, login, getUserPermissions, } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,7 +23,6 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [toastErrorOpen, setToastErrorOpen] = useState(true);
-
 
   useEffect(() => {
     emailRef.current.focus();
@@ -39,19 +38,21 @@ const Login = () => {
     const response = await login({email, password});
     setIsLoading(false);
     if (response.user) {
+      const userPermissions  = await getUserPermissions(response.user.id);
       setEmail('');
       setPassword('');
-      const responseProperties = await axiosPrivate(getToken().accessToken).get(API_ROUTES.GET_USER_ASSETS);
-      const navigateTo = getUserDestination(responseProperties.data.assets.length);
-      navigate(navigateTo, { replace: true });
+      navigate(await getUserDestination(userPermissions), { replace: true });
     } else {
       setErrorMsg(response.message);
     }
   }
 
-  const getUserDestination = (numberOfProperties) => {
+  const getUserDestination = async (userPermissions) => {
+    const allowedPermissions = import.meta.env.VITE_DASHBOARD_PERMISSION;
+    const dashboardPermissions = userPermissions.filter(value => allowedPermissions.includes(value.permissionId));
+    // make decision based on user permissions?
     const destination = location.state?.from?.pathname;
-    return destination ? destination :  (numberOfProperties > 0 ? '/dashboard' : '/onboarding');
+    return destination ? destination : dashboardPermissions.length > 0 ? '/dashboard' : '/welcome' ;
   }
 
   return (

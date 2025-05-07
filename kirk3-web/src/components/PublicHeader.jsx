@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react';
 import { version } from '../../package.json';
 
-import LogoImage from '../images/logo.svg';
+import LogoImage from '../images/logo.png';
 
 const PublicHeader = () => {
   const [appVersion, setAppVersion] = useState('');
