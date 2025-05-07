@@ -9,7 +9,7 @@ import {
   fetchUser,
   findUserByEmail,
 } from "../services/mysql/userServices";
-import { createMultipleUserPermissions } from "../services/mysql/userPermissionService";
+import { createMultipleUserPermissions, retrieveUserPermissions } from "../services/mysql/userPermissionService";
 
 export const getUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -69,6 +69,10 @@ export const loginUser = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(StatusCodes.UNAUTHORIZED).json({message : `Invalid email and/or password`});
     }
+    //fetch permissions
+    const userPermissions = await retrieveUserPermissions(user.id);
+    console.log({userPermissions})
+    userPermissions.forEach((userPermission) => user.userPermissions?.push(userPermission.permissionId));
 
     return res.status(StatusCodes.OK).json({ message: 'Authenticated successfully', user});
   } catch (error: unknown) {

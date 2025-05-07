@@ -4,3 +4,8 @@ export const toTitleCase = (str: string) => {
     text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
   );
 }
+
+export const hasOwnProperty = <X extends {}, Y extends PropertyKey>
+  (obj: X, prop: Y): obj is X & Record<Y, unknown> =>  {
+  return obj.hasOwnProperty(prop)
+}

@@ -5,9 +5,10 @@ import morgan from "morgan";
 import path  from"path";
 import dotenv from "dotenv";
 
-import { userRouter } from "./routes/userRoutes";
+import { financeCategoryRouter } from "./routes/financeCategoryRoutes";
 import { permissionRouter } from "./routes/permissionRoutes";
 import { userPermissionRouter } from "./routes/userPermissionRoutes";
+import { userRouter } from "./routes/userRoutes";
 
 
 dotenv.config();
@@ -30,9 +31,10 @@ export const createServer = () => {
     res.json({ message: 'Server is up and running' });
   });
 
-  app.use('/users', userRouter);
+  app.use('/finance-categories', financeCategoryRouter);
   app.use('/permissions', permissionRouter);
   app.use('/user-permissions', userPermissionRouter);
+  app.use('/users', userRouter);
 
   app.all('*', (req: Request, res: Response) => {
     res.status(404);
