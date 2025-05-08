@@ -59,7 +59,7 @@ export const editFinanceCategory = async (req: Request, res: Response) => {
     return res.status(StatusCodes.BAD_REQUEST).json({ 'message': 'name, description and code are required.'});
   }
 
-  const financeCategory = await updateFinanceCategory(id, description);
+  const financeCategory = await updateFinanceCategory(id, { name, description, code });
   if (financeCategory) {
     return res.status(StatusCodes.OK).json({success: "FinanceCategory updated successfully", financeCategory});
   } else {
