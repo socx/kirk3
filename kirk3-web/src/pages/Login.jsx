@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-import { API_ROUTES, } from '../lib/constants';
-import { axiosPrivate, } from '../lib/axios';
 import useAuth from '../hooks/useAuth';
 
 import AuthImage from "../images/sign-in-01.png";
