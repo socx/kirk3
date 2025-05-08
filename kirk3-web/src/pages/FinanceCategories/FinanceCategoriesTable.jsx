@@ -14,15 +14,7 @@ const FinanceCategoriesTable = ({
   useEffect(() => {
     setList(financeCategories);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    setIsCheck(list.map(li => li.id));
-    if (selectAll) {
-      setIsCheck([]);
-    }
-  };
+  }, [financeCategories]);
 
   const handleClick = e => {
     const { id, checked } = e.target;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useNavigate, } from 'react-router-dom';
 
 import Layout from '../components/PrivateLayout';
+import PaginationClassic from '../components/PaginationClassic';
 
 import FinanceCategoriesTable from './FinanceCategories/FinanceCategoriesTable';
 import { API_ROUTES } from '../lib/constants';
@@ -11,7 +12,10 @@ import useAuth from '../hooks/useAuth';
 import SkeletonLoader from '../components/SkeletonLoader';
 
 
+const RECORDS_PER_PAGE = 6;
+
 const FinanceCategories = () => {
+
   const navigate = useNavigate();
   const { getToken } = useAuth();
 
@@ -35,6 +39,9 @@ const FinanceCategories = () => {
   const [errors, setErrors] = useState(defaultErrors);
   const [isBusy, setIsBusy] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categoriesToShow, setCategoriesToShow] = useState([]);
+
   useEffect(() => {
     const token = getToken().accessToken;
     setAccessToken(token);
@@ -46,7 +53,8 @@ const FinanceCategories = () => {
   },[]);
 
   useEffect(() => {
-  },[currentCategory]);
+    setCategoriesToShow(financeCategories);
+  },[currentCategory, financeCategories]);
 
   const validateField = (field) => {
     setErrors({...errors, [field.id]: {message : ''}});
@@ -140,6 +148,25 @@ const FinanceCategories = () => {
     await refreshFinanceCategories();
   }
 
+  const totalCategories = categoriesToShow && categoriesToShow.length ? categoriesToShow.length : 0;
+  const itemsPerPage = RECORDS_PER_PAGE < totalCategories ? RECORDS_PER_PAGE : totalCategories;
+  
+  const getCurrentPageCategories = () => {
+    const firstIndex = ((currentPage - 1) * itemsPerPage);
+    const lastIndex = firstIndex + itemsPerPage < totalCategories ?  firstIndex + itemsPerPage - 1 : totalCategories - 1;
+    const items = []; for(let i = firstIndex; i <= lastIndex; i++) items.push(i);
+    return categoriesToShow.filter((category, index) => index >= firstIndex && index <= lastIndex);
+  }
+
+  const onPreviousPageButtonClick = () => {
+    setCurrentPage(currentPage === 1 ? currentPage : currentPage - 1);
+  }
+
+  const onNextPageButtonClick = () => {
+    let totalPages = Math.ceil(categoriesToShow.length/RECORDS_PER_PAGE);
+    setCurrentPage(currentPage === totalPages ? currentPage : currentPage + 1);
+  }
+
 
   return (
     <Layout>
@@ -199,9 +226,24 @@ const FinanceCategories = () => {
         { isBusy ? (
           <SkeletonLoader type="rounded" count={3} height={30} width={100} />
         ) : (
-          <FinanceCategoriesTable financeCategories={financeCategories} deleteCategory={onDeleteItem} editCategory={onEditItem} />
+          <FinanceCategoriesTable
+            financeCategories={getCurrentPageCategories()}
+            deleteCategory={onDeleteItem}
+            editCategory={onEditItem}
+          />
         )}
 
+        <div className="mt-8">
+          <PaginationClassic
+            totalItems={totalCategories}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            itemName={'categories'}
+            handlePreviousButtonClick={onPreviousPageButtonClick}
+            handleNextButtonClick={onNextPageButtonClick}
+            isBusy={isBusy}
+          />
+        </div>
       </div>
     </Layout>
   );
