@@ -4,12 +4,106 @@ GET http://localhost:3001/status HTTP/1.1
 ### Get all Users
 GET http://localhost:3001/users HTTP/1.1
 
+### Get one User
+GET http://localhost:3001/users/3917cd21-496a-42ac-8ac4-e37fbb30968a HTTP/1.1
+
 ### Create User
 POST http://localhost:3001/users/register HTTP/1.1
 content-type: application/json
 
 {
-    "fullname": "baby sample",
-    "email" : "baby@sample.com",
+    "fullname": "man sample",
+    "email" : "man@sample.com",
     "password": "securepassword"
 }
+
+### Authenticate User
+POST http://localhost:3001/users/authenticate HTTP/1.1
+content-type: application/json
+
+{
+    "email" : "man@sample.com",
+    "password": "securepassword"
+}
+
+### Activate User (NOT TESTE YET)
+PATCH http://localhost:3001/users/activate-user HTTP/1.1
+content-type: application/json
+Authorization: token xxx
+
+
+##########################################################################
+## PERMISSIONS ENDPOINTS #################################################
+##########################################################################
+### Create Permission
+POST http://localhost:3001/permissions HTTP/1.1
+content-type: application/json
+
+{
+    "description": "Delete Finance Bank Transactions"
+}
+
+### Get all Permissions
+GET http://localhost:3001/permissions HTTP/1.1
+
+
+### Get one Permission
+GET http://localhost:3001/permissions/fcb3ab5f-895b-4d03-8306-47ab0603f6d9 HTTP/1.1
+
+
+### Update Permission (NOT WORKING)
+PATCH http://localhost:3001/permissions/fcb3ab5f-895b-4d03-8306-47ab0603f6d9 HTTP/1.1
+content-type: application/json
+
+{
+    "description": "Delete Finance Bank Transactions====>"
+}
+
+
+### Delete one Permission
+DELETE http://localhost:3001/permissions/fcb3ab5f-895b-4d03-8306-47ab0603f6d9 HTTP/1.1
+
+
+
+##########################################################################
+## USER PERMISSIONS ENDPOINTS ############################################
+##########################################################################
+
+### Create User Permission
+POST http://localhost:3001/user-permissions HTTP/1.1
+content-type: application/json
+
+{
+    "userId": "1d0a48dd-d493-4178-934b-7f88378ee9b5",
+    "permissionId": "29875eb9-3df6-4ce8-a9be-6bc926b6c4f0"
+}
+
+### Get all User Permissions
+GET http://localhost:3001/user-permissions/03f66eda-e25e-4b27-a022-7e27d9a64bde HTTP/1.1
+
+
+### Delete User Permissions
+DELETE http://localhost:3001/user-permissions/1d0a48dd-d493-4178-934b-7f88378ee9b5/29875eb9-3df6-4ce8-a9be-6bc926b6c4f0 HTTP/1.1
+
+
+##########################################################################
+## FINANCE CATEGORIES ENDPOINTS ##########################################
+##########################################################################
+### Create Finance Category
+POST http://localhost:3001/finance-categories HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Cash Gift",
+    "description": "Cash gift collected as offering or otherwise.",
+    "code": "INC2"
+}
+
+### Get Finance Categories
+GET http://localhost:3001/finance-categories HTTP/1.1
+
+### Get Finance Category
+GET http://localhost:3001/finance-categories/1 HTTP/1.1
+
+### Delete Finance Category
+DELETE http://localhost:3001/finance-categories/4 HTTP/1.1
