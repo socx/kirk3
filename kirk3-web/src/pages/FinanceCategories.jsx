@@ -123,6 +123,7 @@ const FinanceCategories = () => {
         const data = response.data;
 
         if (data && data.financeCategory && data.financeCategory.id) {
+          setCurrentPage(1);
           await refreshFinanceCategories();
           setCurrentCategory(defaultCategory);
         }
@@ -213,7 +214,7 @@ const FinanceCategories = () => {
             <div className="flex space-x-4">
               <div className="flex-1">
                 <button
-                  className="xs:w-1/4 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white mt-5"
+                  className="w-1/3 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white mt-5"
                   onClick={(e)=>onAddClick(e)}>
                     {currentCategory.id ? 'Update' : 'Add' }
                   </button>
@@ -224,7 +225,7 @@ const FinanceCategories = () => {
         </div>
 
         { isBusy ? (
-          <SkeletonLoader type="rounded" count={3} height={30} width={100} />
+          <SkeletonLoader type="rect"  height={200} />
         ) : (
           <FinanceCategoriesTable
             financeCategories={getCurrentPageCategories()}
