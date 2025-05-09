@@ -29,7 +29,7 @@ const App = () => {
   return (
     <>
       <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route exact path="/" element={<Welcome />} />
 
           <Route exact path="/activate-user-account" element={<ActivateUserAccount />} />
           <Route exact path="/dashboard" element={<Dashboard />} />
