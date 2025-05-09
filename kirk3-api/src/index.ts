@@ -6,6 +6,11 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import path from "path";
 
+// import User from  "./database/models/user";
+import sequelize from "./dbase/dbConnection";
+// import sequelize from "./db/connection";
+import { User } from "./dbase/models/userModel";
+
 import { connectDB } from "./config/dbConn";
 import { corsOptions } from "./config/corsOptions";
 import { credentials } from "./middlewares/credentials";
@@ -51,7 +56,42 @@ app.get('/server-status',  (req: Request, res: Response) => {
   res.json({ message: 'Estate Portfolio API Server is up and running' });
 });
 
+// app.get("/tests", async (req, res) => {
+//   try{
+//     console.log('got here!')
+//     res.send(await User.findAll({
+//     }))
+//   }catch(err){
+//     console.error(err);
+//     res.status(500).send("Unexpected error occurred on server!");
+//   }
+// })
+
+// app.get("/tests", async (req, res) => {
+//     try{
+//     console.log('got here!')
+//     res.send(await sequelize.sync())
+//   }catch(err){
+//     console.error(err);
+//     res.status(500).send("Unexpected error occurred on server!");
+//   }
+  
+// });
+
+// (async () => {
+//   console.log('got here')
+//   await sequelize.sync();
+//   User.create({
+//     fullname: 'John',
+//     email: 'john@doe.com',
+//     password: 'sdasd'
+//   });
+//   console.log('fot here')
+// })()
+
 app.use('/users', userRouter);
+
+
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
@@ -66,5 +106,27 @@ app.all('*', (req: Request, res: Response) => {
 
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB');
-  app.listen(PORT, () => console.log(`🗄️ Server is listening on port ${PORT}`));
+  app.listen(PORT, () => console.log(`🗄️  MongoDb Server is listening on port ${PORT}`));
 });
+
+// const db_port = process.env.DB_PORT || 3306;
+// app.listen(db_port, () => {
+//   console.log('Connected to MySql DB');
+//   console.log(`🚀 MySql DB Server is listening on port ${db_port}`)
+// })
+
+const start = async (): Promise<void> => {
+  try {
+    sequelize.authenticate();
+    console.log('Database Connection has been established successfully.');
+
+    // server.listen(PORT, () => {
+    //   console.log(`🚀 Server running on ${PORT}`);
+    // });
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+void start();

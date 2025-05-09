@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
+import { createUser } from "../services/userServicesSql";
+import { fetchAllUsersSql } from "../db/userDb";
 import {
   activateUser,
   authenticate,
   clearToken,
-  createUser,
+  // createUser,
   fetchAllUsers,
   fetchUser,
   findUserByEmail,
@@ -201,3 +203,23 @@ export const updateUserPermissions = async (req: Request, res: Response) => {
 
   return res.status(StatusCodes.NOT_FOUND).json({message : `Could not find user`});
 }
+
+
+// MySql
+export const getAllSqlUsers = async (req: Request, res: Response) => {
+  const users = await fetchAllUsersSql();
+  if (users) {
+    return res.status(StatusCodes.OK).json({message: "Users fetched successfully", users}); 
+  }
+
+  return res.status(StatusCodes.NOT_FOUND).json({message : `Could not find any users`});
+};
+
+export const registerUserSql = async (req: Request, res: Response) => {
+  const { fullname, email, password, } = req.body;
+  if (!fullname || !email || !password) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ 'message': 'Username and password are required.' });
+  }
+
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message : `Could not create users`});
+};

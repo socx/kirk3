@@ -1,7 +1,21 @@
 import express from "express";
-import { changePassword, completeUserSignUp, getAllUsers, getUser, initiatePasswordReset, loginUser, logoutUser, refreshToken, registerUser, } from "../controllers/userController";
+import {
+  changePassword,
+  completeUserSignUp,
+  getAllUsers,
+  getUser,
+  getAllSqlUsers,
+  initiatePasswordReset,
+  loginUser,
+  logoutUser,
+  refreshToken,
+  registerUser,
+} from "../controllers/userController";
 import { validateToken } from "../middlewares/validateTokenHandler";
 export const userRouter = express.Router();
+
+userRouter.get("/all", getAllSqlUsers);
+
 
 userRouter.post("/register", registerUser);
 userRouter.patch("/activate-user", completeUserSignUp);

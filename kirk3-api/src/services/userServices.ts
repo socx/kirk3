@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { AuthenticatedUser, User } from '../interfaces/userInterfaces';
 import { UserModel } from '../models/userModel';
 
+
 import { hasOwnProperty } from '../lib/utils';
 
 const getUserFromModel = (userModel: any) => {
