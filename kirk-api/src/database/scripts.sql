@@ -11,13 +11,14 @@ GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on
 -- Create Users Table
   DROP TABLE IF EXISTS `users`;
   CREATE TABLE users (
-    id CHAR(36) NOT NULL PRIMARY KEY,
+    id CHAR(36) NOT NULL,
     fullname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     activatedAt DATETIME,
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME
+    updatedAt DATETIME,
+    PRIMARY KEY (id)
 );
 
 -- Create Permissions Table
@@ -54,7 +55,7 @@ CREATE TABLE user_permissions (
   PRIMARY KEY (userid, permissionid)
 );
 
--- Create finance-categories Table
+-- Create finance_categories Table
 DROP TABLE IF EXISTS `finance_categories`;
 CREATE TABLE finance_categories (
   id INT NOT NULL AUTO_INCREMENT,
@@ -62,4 +63,34 @@ CREATE TABLE finance_categories (
   description VARCHAR(255) NOT NULL,
   code VARCHAR(10) NOT NULL,
   PRIMARY KEY (id)
+);
+
+
+-- Create expenses Table
+DROP TABLE IF EXISTS `expense_items`;
+DROP TABLE IF EXISTS `expenses`;
+CREATE TABLE expenses (
+  expenseId CHAR(36) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  team VARCHAR(40) NOT NULL,
+  totalAmount DOUBLE NOT NULL,
+  claimant CHAR(36),
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME,
+  PRIMARY KEY (expenseId),
+  FOREIGN KEY (claimant) REFERENCES users(id)
+);
+
+
+-- Create expense_items Table
+CREATE TABLE expense_items (
+  expenseItemId CHAR(36) NOT NULL,
+  amount DOUBLE NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  document VARCHAR(255) NOT NULL,
+  expenseItemDate DATETIME,
+  expenseId CHAR(36),
+  PRIMARY KEY (expenseItemId),
+  FOREIGN KEY (expenseId) REFERENCES expenses(expenseId)
 );

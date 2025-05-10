@@ -10,6 +10,7 @@ import {
 } from "sequelize-typescript";
 
 import { UserPermissionModel } from "./UserPermissionModel";
+import { ExpenseModel } from "./ExpenseModel";
 
 interface UserAttributes {
   id?: string;
@@ -70,5 +71,8 @@ export class UserModel extends Model <
 
   @HasMany(() => UserPermissionModel)
   declare userPermissions: UserPermissionModel[];
+
+  @HasMany(() => ExpenseModel, 'expenseId')
+  declare expenses: ExpenseModel[];
 
 }

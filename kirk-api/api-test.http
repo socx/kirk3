@@ -107,3 +107,47 @@ GET http://localhost:3001/finance-categories/1 HTTP/1.1
 
 ### Delete Finance Category
 DELETE http://localhost:3001/finance-categories/4 HTTP/1.1
+
+
+##########################################################################
+## EXPENSES ENDPOINTS ####################################################
+##########################################################################
+### Create Expense
+POST http://localhost:3001/expenses HTTP/1.1
+content-type: application/json
+
+{
+    "totalAmount": 29.99,
+    "description": "Book from Amazon",
+    "team": "City Life",
+    "claimant": "03f66eda-e25e-4b27-a022-7e27d9a64bde",
+    "expenseItems": [
+        {
+            "amount": 19.99,
+            "document" : "/receipts/cure-for-life",
+            "description": "Purchase of Cure for Life",
+            "expenseItemDate": "2025-05-07"
+        },
+        {
+            "amount": 5.00,
+            "document" : "/receipts/bible",
+            "description": "NIV bible",
+            "expenseItemDate": "2025-05-07"
+        },
+        {
+            "amount": 5.00,
+            "document" : "/receipts/bible",
+            "description": "KJV bible",
+            "expenseItemDate": "2025-05-07"
+        }
+    ]
+}
+
+### Get Expenses
+GET http://localhost:3001/expenses HTTP/1.1
+
+### Get Expense
+GET http://localhost:3001/expenses/a89a5c72-5467-4a81-b9d3-75c7326a78c7 HTTP/1.1
+
+### Delete Expense
+DELETE http://localhost:3001/expenses/44931448-cea8-4fde-9b65-ecc22a190919 HTTP/1.1

@@ -9,6 +9,7 @@ import { financeCategoryRouter } from "./routes/financeCategoryRoutes";
 import { permissionRouter } from "./routes/permissionRoutes";
 import { userPermissionRouter } from "./routes/userPermissionRoutes";
 import { userRouter } from "./routes/userRoutes";
+import { expenseRouter } from "./routes/expenseRoutes";
 
 
 dotenv.config();
@@ -31,6 +32,7 @@ export const createServer = () => {
     res.json({ message: 'Server is up and running' });
   });
 
+  app.use('/expenses', expenseRouter);
   app.use('/finance-categories', financeCategoryRouter);
   app.use('/permissions', permissionRouter);
   app.use('/user-permissions', userPermissionRouter);
