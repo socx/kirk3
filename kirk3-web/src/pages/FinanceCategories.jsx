@@ -112,10 +112,6 @@ const FinanceCategories = () => {
       const { id, code, name, description, } = currentCategory;
 
       if (validateForm()) {
-        const formData = new FormData();
-        formData.append('code', code);
-        formData.append('name', name);
-        formData.append('description', description);
         const url = id ? `${API_ROUTES.FINANCE_CATEGORIES_ENDPOINT}/${id}` : API_ROUTES.FINANCE_CATEGORIES_ENDPOINT;
         const response = id
           ? await axiosPrivate(accessToken).patch(url, {code, name, description})
