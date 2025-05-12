@@ -32,6 +32,8 @@ export const createServer = () => {
     res.json({ message: 'Server is up and running' });
   });
 
+  app.use('/documents', express.static(__dirname+'/../documents/'));
+
   app.use('/expenses', expenseRouter);
   app.use('/finance-categories', financeCategoryRouter);
   app.use('/permissions', permissionRouter);

@@ -151,3 +151,11 @@ GET http://localhost:3001/expenses/a89a5c72-5467-4a81-b9d3-75c7326a78c7 HTTP/1.1
 
 ### Delete Expense
 DELETE http://localhost:3001/expenses/44931448-cea8-4fde-9b65-ecc22a190919 HTTP/1.1
+
+
+
+##########################################################################
+## FILE ENDPOINT(S) ####################################################
+##########################################################################
+### Get document 
+GET http://localhost:3001/documents/kjv_bible.pdf HTTP/1.1
