@@ -26,7 +26,11 @@ const FinanceCategoriesTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl relative">
+    <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl rounded-sm relative">
+      <header className="px-5 py-4">
+        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Expenses <span className="text-gray-400 dark:text-gray-500 font-medium">{financeCategories.length}</span></h2>
+      </header>
+
       <div>
 
         {/* Table */}
