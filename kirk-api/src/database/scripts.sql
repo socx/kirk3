@@ -72,12 +72,13 @@ DROP TABLE IF EXISTS `expenses`;
 CREATE TABLE expenses (
   expenseId CHAR(36) NOT NULL,
   description VARCHAR(255) NOT NULL,
-  status VARCHAR(20) NOT NULL,
   team VARCHAR(40) NOT NULL,
   totalAmount DOUBLE NOT NULL,
   claimant CHAR(36),
   createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME,
+  approvedAt DATETIME,
+  paidAt DATETIME,
   PRIMARY KEY (expenseId),
   FOREIGN KEY (claimant) REFERENCES users(id)
 );

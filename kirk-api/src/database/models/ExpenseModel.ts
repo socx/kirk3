@@ -18,10 +18,11 @@ import { UserModel } from "./UserModel";
 interface ExpenseAttributes {
   expenseId?: string;
   description: string;
-  status: string;
   team: string;
   totalAmount: number;
   claimant: string;
+  approvedAt?: Date,
+  paidAt?: Date,
 }
 
 interface ExpenseCreationAttributes extends
@@ -67,6 +68,18 @@ export class ExpenseModel extends Model <
   })
   declare totalAmount: number;
 
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  declare approvedAt: Date;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  declare paidAt: Date;
+
   @CreatedAt
   declare createdAt: Date;
 
@@ -90,5 +103,4 @@ export class ExpenseModel extends Model <
   })
   declare claimant: string;
   
-
 }

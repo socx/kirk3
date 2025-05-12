@@ -4,10 +4,10 @@ export interface BaseExpense {
   totalAmount: number;
   description: string;
   team: string;
-  status: string;
   claimant: string;
   createdAt: string,
-  updatedAt: string,
+  paidAt: string,
+  approvedAt: string,
   expenseItems: ExpenseItem[];
 }
 

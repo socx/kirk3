@@ -53,13 +53,13 @@ export const insertExpense = async (req: Request, res: Response) => {
 
 export const editExpense = async (req: Request, res: Response) => {
   const { expenseId } = req.params;
-  const { totalAmount, claimant, description, expenseItems, team, status } = req.body;
+  const { totalAmount, claimant, description, expenseItems, team, } = req.body;
 
-  if (!totalAmount || !claimant || !description || !expenseItems|| !team || !status || !expenseId) {
+  if (!totalAmount || !claimant || !description || !expenseItems|| !team || !expenseId) {
     return res.status(StatusCodes.BAD_REQUEST).json({ 'message': 'Missing required parameter.'});
   }
 
-  const Expense = await updateExpense(expenseId, { totalAmount, claimant, description, expenseItems, team, status, expenseId });
+  const Expense = await updateExpense(expenseId, { totalAmount, claimant, description, expenseItems, team, expenseId });
   if (Expense) {
     return res.status(StatusCodes.OK).json({success: "Expense updated successfully", Expense});
   } else {

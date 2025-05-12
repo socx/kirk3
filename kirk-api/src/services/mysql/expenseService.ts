@@ -6,17 +6,17 @@ import { UserModel } from '../../database/models/UserModel';
 
 
 const getExpenseFromModel = (expenseModel: any) => {
-  const { expenseId, totalAmount, description, claimant, expenseItems, status, team, createdAt, updatedAt, } = expenseModel
+  const { expenseId, totalAmount, description, claimant, expenseItems, team, createdAt, paidAt, approvedAt,} = expenseModel
 
   const expense: Expense = {
     expenseId,
     totalAmount,
     description,
     claimant,
-    status,
     team,
     createdAt: createdAt.toISOString(),
-    updatedAt: updatedAt.toISOString(),
+    approvedAt: approvedAt ? approvedAt.toISOString() : null,
+    paidAt: paidAt ? paidAt.toISOString() : null,
     expenseItems: [],
   }
 
@@ -47,7 +47,6 @@ export const createExpense = async (totalAmount: number, description: string, cl
     totalAmount,
     claimant,
     description,
-    status: 'NEW',
     team,
   });
   expenseModel.expenseItems = [];
@@ -69,7 +68,7 @@ export const retrieveExpenses = async () => {
   const expenses: Expense[] = [];
   const expenseModels = await ExpenseModel.findAll({
     include: [ExpenseItemModel],
-    attributes: ['expenseId', 'totalAmount', 'description', 'claimant', 'status', 'team', 'createdAt', 'updatedAt'],
+    attributes: ['expenseId', 'totalAmount', 'description', 'claimant', 'team', 'createdAt', 'approvedAt', 'paidAt'],
   });
   
   if (expenseModels && expenseModels.length) {
@@ -84,7 +83,7 @@ export const retrieveExpense = async (expenseId: string) => {
   const expenseModel = await ExpenseModel.findOne({
     where: { expenseId: expenseId },
     include: [ExpenseItemModel],
-    attributes: ['expenseId', 'totalAmount', 'description', 'claimant', 'status', 'team', 'createdAt', 'updatedAt'],
+    attributes: ['expenseId', 'totalAmount', 'description', 'claimant', 'team', 'createdAt', 'approvedAt', 'paidAt'],
   });
   return expenseModel ? getExpenseFromModel(expenseModel) : null;
 }
