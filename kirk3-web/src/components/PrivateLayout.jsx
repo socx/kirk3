@@ -13,7 +13,7 @@ function PrivateLayout({children}) {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant="v2" />
 
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-white dark:bg-gray-900">
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden dark:bg-gray-900">
         {/*  Site header */}
         <PageHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant="v3" />
 
