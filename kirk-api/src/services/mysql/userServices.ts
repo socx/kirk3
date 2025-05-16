@@ -109,3 +109,15 @@ export const authenticate = async (email: string, password: string): Promise<Aut
     refreshToken
   };
 };
+
+export const getUserFromToken = async (token: string) => {
+  const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
+  const decoded: any = jwt.verify(token, accessTokenSecret);
+  const { userInfo } = decoded;
+  let tokenUser = null;
+  if (userInfo && userInfo.email && typeof userInfo.email === 'string') {
+    tokenUser = await findUserByEmail(userInfo.email);
+    return tokenUser;
+  }
+  return;
+};

@@ -1,12 +1,12 @@
 import React from 'react';
 
-function Toast({
+const Toast = ({
   children,
   className,
   type,
   open,
   setOpen
-}) {
+}) => {
 
   const typeIcon = (type) => {
     switch (type) {

@@ -90,8 +90,7 @@ CREATE TABLE expense_items (
   amount DOUBLE NOT NULL,
   description VARCHAR(255) NOT NULL,
   document VARCHAR(255) NOT NULL,
-  expenseItemDate DATETIME,
   expenseId CHAR(36),
   PRIMARY KEY (expenseItemId),
-  FOREIGN KEY (expenseId) REFERENCES expenses(expenseId)
+  FOREIGN KEY (expenseId) REFERENCES expenses(expenseId) ON DELETE CASCADE
 );

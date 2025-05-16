@@ -28,14 +28,13 @@ const getExpenseFromModel = (expenseModel: any) => {
 }
 
 const getExpenseItemFromModel = (expenseItemModel: any) => {
-  const { expenseItemId, amount, description, document, expenseItemDate, expenseId, } = expenseItemModel
+  const { expenseItemId, amount, description, document, expenseId, } = expenseItemModel
 
   const expenseItem: ExpenseItem = {
     expenseItemId,
     amount,
     description,
     document,
-    expenseItemDate,
     expenseId,
   }
   return expenseItem;
@@ -49,14 +48,15 @@ export const createExpense = async (totalAmount: number, description: string, cl
     description,
     team,
   });
+  
+  // Create expense itemes
   expenseModel.expenseItems = [];
   for (const expenseItem of expenseItems) {
-    const { amount, description, document, expenseItemDate } = expenseItem;
+    const { amount, description, document } = expenseItem;
     const expenseItemModel = await ExpenseItemModel.create({
       amount,
       description,
       document,
-      expenseItemDate,
       expenseId: expenseModel.expenseId,
     });
     expenseModel.expenseItems.push(expenseItemModel);
@@ -88,7 +88,7 @@ export const retrieveExpense = async (expenseId: string) => {
   return expenseModel ? getExpenseFromModel(expenseModel) : null;
 }
 
-// To test for duplicates (Maybe not enough)
+// TODO: Rethink. This is surely not the best test for duplicates
 export const retrieveExpenseByDetails = async (totalAmount: number, description: string, team: string, claimant: string) => {
   const expenseModel = await ExpenseModel.findOne({
     where: {

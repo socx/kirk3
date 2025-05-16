@@ -3,7 +3,7 @@ import React from 'react';
 const DeleteButton = ({
   selectedItems
 }) => {
-  console.log({selectedItems})
+  
   return (
     <div className={`${selectedItems.length < 1 && 'hidden'}`}>
       <div className="flex items-center">

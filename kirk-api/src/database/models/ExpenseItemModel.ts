@@ -16,7 +16,6 @@ interface ExpenseItemAttributes {
   amount: number;
   description: string;
   document: string;
-  expenseItemDate: Date;
   expenseId: string;
 }
 
@@ -57,11 +56,6 @@ export class ExpenseItemModel extends Model <
   })
   declare document: string;
 
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-  })
-  declare expenseItemDate: Date;
 
   @ForeignKey(() => ExpenseModel)
   @Column({

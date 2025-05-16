@@ -49,12 +49,6 @@ export class ExpenseModel extends Model <
     allowNull: false,
   })
   declare description: string;
-  
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  declare status: string;
 
   @Column({
     type: DataType.STRING,
@@ -91,9 +85,6 @@ export class ExpenseModel extends Model <
     hooks: true
   })
   declare expenseItems: ExpenseItemModel[];
-
-  // @BelongsTo(() => UserModel, 'id')
-  // declare claimant: UserModel;
 
   @ForeignKey(() => UserModel)
   @Column({

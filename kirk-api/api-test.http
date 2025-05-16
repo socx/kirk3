@@ -115,30 +115,27 @@ DELETE http://localhost:3001/finance-categories/4 HTTP/1.1
 ### Create Expense
 POST http://localhost:3001/expenses HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mbyI6eyJlbWFpbCI6Im1hbkBzYW1wbGUuY29tIn0sImlhdCI6MTc0NzM5OTM4MCwiZXhwIjoxNzQ3NDg1NzgwfQ.E9VSkXTTw2eNsfnysUtPJ1Iel0W2-fKWaN96joAQ7LA
 
 {
-    "totalAmount": 29.99,
-    "description": "Book from Amazon",
-    "team": "City Life",
+    "description": "Another Bish bash bosh",
+    "team": "Worship & Leadership",
     "claimant": "03f66eda-e25e-4b27-a022-7e27d9a64bde",
     "expenseItems": [
         {
-            "amount": 19.99,
-            "document" : "/receipts/cure-for-life",
-            "description": "Purchase of Cure for Life",
-            "expenseItemDate": "2025-05-07"
+            "amount": 12,
+            "document" : "boarding-pass.pdf",
+            "description": "boarding-pass"
         },
         {
-            "amount": 5.00,
-            "document" : "/receipts/bible",
-            "description": "NIV bible",
-            "expenseItemDate": "2025-05-07"
+            "amount": 873.32,
+            "document" : "cotinuo.pdf",
+            "description": "andalucia"
         },
         {
-            "amount": 5.00,
-            "document" : "/receipts/bible",
-            "description": "KJV bible",
-            "expenseItemDate": "2025-05-07"
+            "amount": 459992.22,
+            "document" : "other.pdf",
+            "description": "Otras cosas"
         }
     ]
 }
@@ -150,7 +147,7 @@ GET http://localhost:3001/expenses HTTP/1.1
 GET http://localhost:3001/expenses/a89a5c72-5467-4a81-b9d3-75c7326a78c7 HTTP/1.1
 
 ### Delete Expense
-DELETE http://localhost:3001/expenses/44931448-cea8-4fde-9b65-ecc22a190919 HTTP/1.1
+DELETE http://localhost:3001/expenses/ccf6bb79-0667-4a2f-8f05-4a54d0daf5fa HTTP/1.1
 
 
 
@@ -159,3 +156,5 @@ DELETE http://localhost:3001/expenses/44931448-cea8-4fde-9b65-ecc22a190919 HTTP/
 ##########################################################################
 ### Get document 
 GET http://localhost:3001/documents/kjv_bible.pdf HTTP/1.1
+
+
