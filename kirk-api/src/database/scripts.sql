@@ -1,12 +1,4 @@
--- Create Database
--- DROP DATABASE IF EXISTS `db_kirk3_123`;
--- CREATE DATABASE `db_kirk3_123`;
 
- USE db_kirk3_123;
-
--- Create Database User and Permissions 
-CREATE USER 'kirk_user'@'localhost' IDENTIFIED BY 'N33d154yM0r3?';
-GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'kirk_user'@'localhost' WITH GRANT OPTION;
 
 -- Create Users Table
   DROP TABLE IF EXISTS `users`;
@@ -24,8 +16,9 @@ GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on
 -- Create Permissions Table
   DROP TABLE IF EXISTS `permissions`;
   CREATE TABLE permissions (
-    id CHAR(36) NOT NULL PRIMARY KEY,
-    description VARCHAR(255) NOT NULL
+    id CHAR(36) NOT NULL DEFAULT (UUID()),
+    description VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
 );
 
 --  Load default Permissions
