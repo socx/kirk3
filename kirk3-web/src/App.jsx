@@ -10,7 +10,7 @@ import './css/style.css';
 // Import pages
 import ActivateUserAccount from './pages/ActivateUserAccount';
 import Dashboard from './pages/Dashboard';
-import Expenses from './pages/Finance/Expenses';
+import Expenses from './pages/Finance/Expenses/Index';
 import Login from './pages/Login';
 import Welcome from './pages/Welcome';
 import PageNotFound from './pages/PageNotFound';
