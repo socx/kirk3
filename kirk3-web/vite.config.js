@@ -19,9 +19,6 @@ export default defineConfig({
     ]
   }, 
   build: {
-    outDir: 'dist', // Output directory
-    minify: 'terser', // Minify files using Terser
-    sourcemap: true, // Generate source maps
     commonjsOptions: {
       transformMixedEsModules: true,
     },
