@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, } from 'react-router-dom';
 
+import Datepicker from '../../../components/Datepicker';
 import DeleteButton from '../../../components/DeleteButton';
+import ModalBasic from '../../../components/ModalBasic';
 import Layout from '../../../components/PrivateLayout';
 import PaginationClassic from '../../../components/PaginationClassic';
 import SkeletonLoader from '../../../components/SkeletonLoader';
+
 import ExpensesTable from './ExpensesTable';
+import ExpenseForm from './ExpenseForm';
 
 import { API_ROUTES } from '../../../lib/constants';
 import { axiosPrivate } from '../../../lib/axios';
@@ -14,17 +18,24 @@ import useAuth from '../../../hooks/useAuth';
 
 const RECORDS_PER_PAGE = 6;
 
+const TEAMS = [
+  { name: 'Media' },
+  { name: 'Leadership' },
+  { name: 'Worship' },
+]
+
 const Expenses = () => {
 
   const navigate = useNavigate();
-  const { getToken } = useAuth();
+  const { auth, getToken } = useAuth();
+  const { id } = auth; 
 
   const defaultErrors = {
-    totalAmount: { message: '' },
-    description: { message: '' },
-    team: { message: '' },
-    claimant: { message: '' },
-    formError: { message: '' },
+    totalAmount: '',
+    description: '',
+    team: '',
+    claimant: '',
+    formError: '',
   };
 
   const defaultExpense = {
@@ -44,6 +55,7 @@ const Expenses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [expensesToShow, setExpensesToShow] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [createExpenseModalOpen, setCreateExpenseModalOpen] = useState(false);
 
   const handleSelectedItems = (selectedItems) => {
     setSelectedItems([...selectedItems]);
@@ -57,11 +69,11 @@ const Expenses = () => {
       await refreshExpenses();
     }
     fetchExpenses();
-  },[]);
+  }, []);
 
   useEffect(() => {
     setExpensesToShow(expenses);
-  },[currentExpense, expenses]);
+  }, [currentExpense, expenses]);
 
   const validateField = (field) => {
     setErrors({...errors, [field.id]: {message : ''}});
@@ -162,6 +174,12 @@ const Expenses = () => {
     return expensesToShow.filter((expense, index) => index >= firstIndex && index <= lastIndex);
   }
 
+  const onExpenseDateReady = () => {
+  }
+
+  const onExpenseDateChange = () => {
+  }
+
   const onPreviousPageButtonClick = () => {
     setCurrentPage(currentPage === 1 ? currentPage : currentPage - 1);
   }
@@ -169,6 +187,50 @@ const Expenses = () => {
   const onNextPageButtonClick = () => {
     let totalPages = Math.ceil(expensesToShow.length/RECORDS_PER_PAGE);
     setCurrentPage(currentPage === totalPages ? currentPage : currentPage + 1);
+  }
+
+
+  const handleFormSubmit = async (expense, expenseItems) => {
+    try {
+      setIsBusy(true);
+      const { expenseId,  } = expense;
+
+      let totalAmount = 0;
+      for (let i = 0;  i < expenseItems.length; i++) {
+        totalAmount += parseFloat(expenseItems[i].amount);
+      }
+      const requestBody = {
+        ...expense,
+        expenseItems,
+        claimant: JSON.parse(localStorage.getItem('auth'))?.id,
+        totalAmount
+      };
+
+      // if (validateForm()) {
+        const url = expenseId ? `${API_ROUTES.EXPENSES_ENDPOINT}/${expenseId}` : API_ROUTES.EXPENSES_ENDPOINT;
+        const response = expenseId
+          ? await axiosPrivate(accessToken).patch(url, {...requestBody})
+          : await axiosPrivate(accessToken).post(url, {...requestBody})
+        const data = response.data;
+
+        if (data && data.expense && data.expense.expenseId) {
+          setCurrentPage(1);
+          await refreshExpenses();
+          setCurrentExpense(defaultExpense);
+        }
+      // }
+    } catch (err) {
+      if (err.response.status === 401) {
+        navigate('/signin');
+      }
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
+  const handleFormCancel = (e) => {
+    e.preventDefault();
+    setCreateExpenseModalOpen(false);
   }
 
 
@@ -184,6 +246,30 @@ const Expenses = () => {
             <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Expenses</h1>
           </div>
 
+          {/* Right: Actions */}
+          <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+            {/* Create expense button */}
+            {!isBusy  ? (
+                <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white" onClick={(e) => { e.stopPropagation(); setCreateExpenseModalOpen(true); }}>
+                  <svg className="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                  </svg>
+                  <span className="hidden xs:block ml-2">New Expenses</span>
+                </button>
+              ) : (
+                <SkeletonLoader type="rect" count={1} height={40} width={100} />
+              )
+            }
+
+            <ModalBasic id="expense-modal" modalOpen={createExpenseModalOpen} setModalOpen={setCreateExpenseModalOpen} title="New Expenses">
+              <ExpenseForm
+                currency={'PLN'}
+                expense={currentExpense}
+                handleFormSubmit={handleFormSubmit}
+                handleFormCancel={handleFormCancel}
+              />
+            </ModalBasic>
+          </div>
         </div>
 
 
@@ -224,6 +310,66 @@ const Expenses = () => {
           </div>
 
         </div>
+
+
+        <div className="space-y-8 mb-5">
+
+
+          <div className="grid gap-5 md:grid-cols-4">
+
+            <div>
+              {/* Start */}
+              <div>
+                <input
+                  id="description"
+                  className="form-input w-full"
+                  type="text"
+                  required
+                  value={currentExpense.description}
+                  onChange={(e)=>onChangeInput(e)}
+                />
+              </div>
+              {errors.description &&
+                <div className={`text-xs mt-1 text-red-500 ${errors.description ? 'hidden' : ''}`}>Error text goes here!</div>
+              }
+              {/* End */}
+            </div>
+
+            <div>
+              {/* Start */}
+              <div>
+                <select
+                  id="team"
+                  className="form-select w-full"
+                  value={currentExpense.team}
+                  onChange={(e)=>onChangeInput(e)}
+                >
+                  {TEAMS.map(({name}, index) => {
+                    return (
+                      <option key={index}>{name}</option>
+                    )
+                  })}
+                </select>
+              </div>
+              {errors.team &&
+                <div className={`text-xs mt-1 text-red-500 ${errors.team ? 'hidden' : ''}`}>Error text goes here!</div>
+              }
+              {/* End */}
+            </div>
+            
+              <div>
+                <button
+                  className="ml-4 w-1/2 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                  onClick={(e) => { e.stopPropagation(); setCreateExpenseModalOpen(true); }}
+                >
+                    {currentExpense.currentExpenseId ? 'Update' : 'Add' }
+                  </button>
+              </div>
+
+          </div>
+
+        </div>
+
 
 
         { isBusy ? (

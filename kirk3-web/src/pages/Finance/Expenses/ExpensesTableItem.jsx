@@ -132,9 +132,9 @@ const ExpensesTableItem = ({
                           <div className="w-1/2">
                             <a
                               className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                              href={`http://localhost:3001/files/${document}`}
+                              href={`http://localhost:3001/receipts/${document}`}
                             >
-                              <button className=" p-1 btn w-full bg-white border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
+                              <button className="p-1 btn w-full bg-white border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
                                 <svg className="fill-current text-gray-600 dark:text-gray-700 shrink-0 rotate-180" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                   <path d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
                                 </svg>

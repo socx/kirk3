@@ -4,7 +4,7 @@ export const API_ROUTES = {
   LOGOUT: `/users/logout`,
   GET_USER_PERMISSIONS: '/user-permissions',
   FINANCE_CATEGORIES_ENDPOINT: '/finance-categories',
-  EXPENSES_ENDPOINT: 'expenses',
+  EXPENSES_ENDPOINT: '/expenses',
   DOCUMENT_DOWNLOAD_ENDPOINT: '/files',
 };
 
