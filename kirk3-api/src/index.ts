@@ -12,6 +12,10 @@ import { credentials } from "./middlewares/credentials";
 import { errorHandler } from "./middlewares/errorHandler";
 import { logger } from "./middlewares/logEvents";
 
+import { userRouter } from "./routes/userRoutes";
+import { permissionRouter } from "./routes/permissionRoutes";
+import { validateToken } from "./middlewares/validateTokenHandler";
+
 dotenv.config();
 
 const PORT: Number = parseInt(process.env.PORT as string, 10) || 3535;
@@ -49,6 +53,11 @@ app.get("/", (req: Request, res: Response) => {
 app.get('/current-time',  (req: Request, res: Response) => {
   res.json({ message: `Current Time: ${new Date(Date.now())}` });
 });
+
+app.use('/users', userRouter);
+
+app.use(validateToken);
+app.use('/permissions', permissionRouter);
 
 
 app.all('*', (req: Request, res: Response) => {
