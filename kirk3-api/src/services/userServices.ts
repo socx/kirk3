@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { AuthenticatedUser, User } from '../interfaces/UserInterfaces';
 import { UserModel } from '../models/UserModel';
 
+
 const getUserFromModel = (userModel: any) => {
   const { _id, email, fullname, permissions, team, createdAt, updatedAt, activatedAt } = userModel;
 
@@ -124,7 +125,6 @@ export const fetchAllUsers = async () => {
   const userModels = await UserModel.find({});
   if (userModels && userModels.length) {
     for (let i = 0; i < userModels.length; i++) {
-      console.log({user: userModels[i] })
       users.push(getUserFromModel(userModels[i] as any));
     }
   }

@@ -8,13 +8,16 @@ import path from "path";
 
 import { connectDB } from "./config/dbConn";
 import { corsOptions } from "./config/corsOptions";
+
 import { credentials } from "./middlewares/credentials";
 import { errorHandler } from "./middlewares/errorHandler";
 import { logger } from "./middlewares/logEvents";
-
-import { userRouter } from "./routes/userRoutes";
-import { permissionRouter } from "./routes/permissionRoutes";
 import { validateToken } from "./middlewares/validateTokenHandler";
+
+import { expenseRouter } from "./routes/expenseRoutes";
+import { permissionRouter } from "./routes/permissionRoutes";
+import { userRouter } from "./routes/userRoutes";
+
 
 dotenv.config();
 
@@ -58,7 +61,7 @@ app.use('/users', userRouter);
 
 app.use(validateToken);
 app.use('/permissions', permissionRouter);
-
+app.use('/expenses', expenseRouter);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
