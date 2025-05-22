@@ -19,14 +19,14 @@ const ExpenseForm = ({
     amount: { message: '' },
     description: { message: '' },
     itemDescription: { message: '' },
-    documents: { message: '' },
+    document: { message: '' },
     formError: { message: '' },
   };
 
   const defaultExpenseItem = {
     amount: '',
     description: '',
-    documents: [],
+    document: [],
   };
 
   const defaultExpense = {
@@ -70,7 +70,7 @@ const ExpenseForm = ({
   }
 
   const hasErrors = () => {
-    return errors.amount.length || errors.itemDescription.length || errors.documents.length
+    return errors.amount.length || errors.itemDescription.length || errors.document.length
   }
 
   const onChangeInput = (e) => {
@@ -81,9 +81,9 @@ const ExpenseForm = ({
 
   const onChangeFile = (e) => {
     if (e.length && e[0].lastModified) {
-      const documents =  e[0];
+      const document =  e[0];
       // If existing in the list update
-      setCurrentExpenseItem({...currentExpenseItem, documents: [documents]});
+      setCurrentExpenseItem({...currentExpenseItem, document: [document]});
     }
   }
 
@@ -203,11 +203,11 @@ const ExpenseForm = ({
               </div>
               <div>
                 <div className="relative">
-                  <FileInput isRequired={false} fileList={currentExpenseItem.documents} onChange={(e)=>onChangeFile(e)} className="form-textarea w-full px-2 py-1" />
+                  <FileInput isRequired={false} fileList={currentExpenseItem.document} onChange={(e)=>onChangeFile(e)} className="form-textarea w-full px-2 py-1" />
                 </div>
                 {/* <div className="text-xs mt-1 text-center">(pdf, jpg, jpeg, png, )</div> */}
-                {errors.documents && <div className="text-xs mt-1 text-rose-500">{errors.documents.message}</div>}
-                {!errors.documents && <div className="text-xs mt-1">Invoice/Receipts (pdf, jpg, png)</div>}
+                {errors.document && <div className="text-xs mt-1 text-rose-500">{errors.document.message}</div>}
+                {!errors.document && <div className="text-xs mt-1">Invoice/Receipts (pdf, jpg, png)</div>}
               </div>
             </div>
 
@@ -247,7 +247,7 @@ const ExpenseForm = ({
                 
                 <tbody className="text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60">
                   {expenseItems && expenseItems.length > 0 &&
-                    expenseItems.map(({description, amount, documents} , index) => {
+                    expenseItems.map(({description, amount, document} , index) => {
                       return (
                         <tr className='border-b' key={index}>
                           <td className="px-2 first:pl-5 last:pr-5 py-1/2 whitespace-nowrap">
@@ -257,7 +257,7 @@ const ExpenseForm = ({
                             <div>{currency} {amount}</div>
                           </td>
                           <td className="px-2 first:pl-5 last:pr-5 py-1/2 whitespace-nowrap">
-                            <div>{documents && `${documents.length} document(s)`}</div>
+                            <div>{document && `${document.length} document(s)`}</div>
                           </td>
                         </tr>
                       )

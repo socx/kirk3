@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, } from 'react-router-dom';
 
-import Datepicker from '../../../components/Datepicker';
+
 import DeleteButton from '../../../components/DeleteButton';
 import ModalBasic from '../../../components/ModalBasic';
 import Layout from '../../../components/PrivateLayout';
@@ -63,8 +63,7 @@ const Expenses = () => {
 
 
   useEffect(() => {
-    const token = getToken().accessToken;
-    setAccessToken(token);
+    setAccessToken(getToken()?.accessToken);
     async function fetchExpenses() {
       await refreshExpenses();
     }
@@ -104,7 +103,7 @@ const Expenses = () => {
   const refreshExpenses = async () => {
     try {
       setIsBusy(true);
-      const response = await axiosPrivate(accessToken).get(API_ROUTES.EXPENSES_ENDPOINT);
+      const response = await axiosPrivate(getToken()?.accessToken).get(API_ROUTES.EXPENSES_ENDPOINT);
       const data = response.data;
 
       if (data && data.expenses) {
@@ -133,8 +132,8 @@ const Expenses = () => {
       if (validateForm()) {
         const url = expenseId ? `${API_ROUTES.EXPENSES_ENDPOINT}/${expenseId}` : API_ROUTES.EXPENSES_ENDPOINT;
         const response = expenseId
-          ? await axiosPrivate(accessToken).patch(url, {team, claimant, description})
-          : await axiosPrivate(accessToken).post(url, {team, claimant, description})
+          ? await axiosPrivate(getToken()?.accessToken).patch(url, {team, claimant, description})
+          : await axiosPrivate(getToken()?.accessToken).post(url, {team, claimant, description})
         const data = response.data;
 
         if (data && data.expense && data.expense.expenseId) {
@@ -194,23 +193,25 @@ const Expenses = () => {
     try {
       setIsBusy(true);
       const { expenseId,  } = expense;
-
-      let totalAmount = 0;
-      for (let i = 0;  i < expenseItems.length; i++) {
-        totalAmount += parseFloat(expenseItems[i].amount);
+      const formData = new FormData();
+      if (expense.expenseId) {
+        formData.append('expenseId', expense.expenseId);
       }
-      const requestBody = {
-        ...expense,
-        expenseItems,
-        claimant: JSON.parse(localStorage.getItem('auth'))?.id,
-        totalAmount
-      };
+      formData.append('description', expense.description);
+      formData.append('team', expense.team);
+      // formData.append('expenseItems', JSON.stringify(expense.expenseItems));
+      const expenseIms = [];
+      for (const expenseItem of expenseItems) {
+        formData.append('receipts', expenseItem.document[0]);
+        expenseIms.push({...expenseItem, document: 'receipts'});
+      }
+      formData.append('expenseItems', JSON.stringify(expenseIms));
 
       // if (validateForm()) {
         const url = expenseId ? `${API_ROUTES.EXPENSES_ENDPOINT}/${expenseId}` : API_ROUTES.EXPENSES_ENDPOINT;
         const response = expenseId
-          ? await axiosPrivate(accessToken).patch(url, {...requestBody})
-          : await axiosPrivate(accessToken).post(url, {...requestBody})
+          ? await axiosPrivate(accessToken).patch(url, formData)
+          : await axiosPrivate(accessToken).post(url, formData)
         const data = response.data;
 
         if (data && data.expense && data.expense.expenseId) {

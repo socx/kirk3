@@ -9,7 +9,7 @@ import PublicHeader from '../components/PublicHeader';
 import Toast from '../components/Toast';
 
 const Login = () => {
-  const { getToken, login, getUserPermissions, } = useAuth();
+  const { getToken, login, } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,8 +27,8 @@ const Login = () => {
 
     async function checkUser() {
       const token  = getToken();
-      if (token && token.permissions && permissions.length > 0) {
-        const destination = await getUserDestination(permissions);
+      if (token && token.permissions && token.permissions.length > 0) {
+        const destination = await getUserDestination(token.permissions);
         navigate(destination, { replace: true });
       }
     }

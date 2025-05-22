@@ -115,9 +115,9 @@ const ExpensesTableItem = ({
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60">
-                {expenseItems && expenseItems.length > 0 && expenseItems.map(({amount, description, expenseItemDate, expenseItemId, document}) => {
+                {expenseItems && expenseItems.length > 0 && expenseItems.map(({amount, description, expenseItemDate, expenseItemId, document}, index) => {
                   return (
-                    <tr className='border-b' key={expenseItemId}>
+                    <tr className='border-b' key={index}>
                       <td className="px-2 first:pl-5 last:pr-5 py-1/2 whitespace-nowrap">
                         <div>{description}</div>
                       </td>
@@ -132,7 +132,7 @@ const ExpensesTableItem = ({
                           <div className="w-1/2">
                             <a
                               className="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400"
-                              href={`http://localhost:3001/receipts/${document}`}
+                              href={`http://localhost:7070/receipts/${document}`}
                             >
                               <button className="p-1 btn w-full bg-white border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300">
                                 <svg className="fill-current text-gray-600 dark:text-gray-700 shrink-0 rotate-180" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
