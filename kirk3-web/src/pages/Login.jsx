@@ -24,6 +24,15 @@ const Login = () => {
 
   useEffect(() => {
     emailRef.current.focus();
+
+    async function checkUser() {
+      const token  = getToken();
+      if (token && token.permissions && permissions.length > 0) {
+        const destination = await getUserDestination(permissions);
+        navigate(destination, { replace: true });
+      }
+    }
+    checkUser();
   }, [])
 
   useEffect(() => {
@@ -36,9 +45,9 @@ const Login = () => {
     const response = await login({email, password});
     setIsLoading(false);
     if (response.user) {
-      const userPermissions  = await getUserPermissions(response.user.id);
       setEmail('');
       setPassword('');
+      const userPermissions  = getToken()?.permissions;
       navigate(await getUserDestination(userPermissions), { replace: true });
     } else {
       setErrorMsg(response.message);
