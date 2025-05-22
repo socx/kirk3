@@ -1,7 +1,6 @@
-export const allowedOrigins = [
-  'https://kirk-aureus.onrender.com',
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://localhost:5175',
-  'http://localhost:3535',
-];
+import dotenv from "dotenv";
+
+dotenv.config();
+
+
+export const allowedOrigins = (process.env.ALLOWED_ORIGINS as string)?.split('|').map(origin=>origin);

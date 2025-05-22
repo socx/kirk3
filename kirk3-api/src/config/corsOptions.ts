@@ -1,6 +1,7 @@
 import cors from "cors";
 import { allowedOrigins } from "./allowedOrigins";
 
+
 export type CallbackType = (origin: Error | null, callback?: boolean | string) => void;
 
 const customOrigin = (origin: string | undefined, callback: CallbackType) => {
