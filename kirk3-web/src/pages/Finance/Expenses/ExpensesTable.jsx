@@ -84,10 +84,10 @@ const ExpensesTable = ({
             </thead>
             {/* Table body */}
             {
-              list.map((expense) => {
+              list.map((expense, index) => {
                 return (
                   <ExpensesTableItem
-                    key={expense.expenseId}
+                    key={index}
                     expenseId={expense.expenseId}
                     claimant={expense.claimant}
                     approvedAt={expense.approvedAt}
