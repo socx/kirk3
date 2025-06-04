@@ -17,6 +17,7 @@ import { validateToken } from "./middlewares/validateTokenHandler";
 import { expenseRouter } from "./routes/expenseRoutes";
 import { permissionRouter } from "./routes/permissionRoutes";
 import { userRouter } from "./routes/userRoutes";
+import { transactionCategoryRouter } from "./routes/transactionCategoryRoutes";
 
 
 dotenv.config();
@@ -62,6 +63,7 @@ app.use('/users', userRouter);
 app.use(validateToken);
 app.use('/permissions', permissionRouter);
 app.use('/expenses', expenseRouter);
+app.use('/transaction-categories', transactionCategoryRouter);
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
