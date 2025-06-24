@@ -20,7 +20,7 @@ export const fileStorage = (directoryPath: string) => multer.diskStorage({
   ): void => {
     const arr = file.originalname.split('.');
     const ext = arr[arr.length - 1];
-    const filefull = `${file.fieldname}-${Date.now()}.${ext}`;
+    const filefull = `${file.fieldname}-${Math.round(Math.random() * 1E9).toString()}-${Date.now()}.${ext}`;
     callback(null, filefull);
   }
 });
