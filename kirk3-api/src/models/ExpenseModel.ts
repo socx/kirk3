@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 import { randomUUID } from "crypto";
+import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
 import { ExpenseItemModel } from './ExpenseItemModel';
 
 
 const ExpenseItemSchema = new mongoose.Schema(
   {
-    _id: {
-      type: mongoose.Schema.Types.UUID,
-      default: randomUUID,
-      immutable: true,
-    },
     amount: {
       type: Number,
       required: true,
@@ -28,11 +24,6 @@ const ExpenseItemSchema = new mongoose.Schema(
 
 const ExpenseSchema = new mongoose.Schema(
   {
-    _id: {
-      type: mongoose.Schema.Types.UUID,
-      default: randomUUID,
-      immutable: true,
-    },
     claimant: {
       type: String,
       required: true,
