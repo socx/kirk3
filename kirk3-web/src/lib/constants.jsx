@@ -1,11 +1,14 @@
 export const API_ROUTES = {
-  REGISTER: `/users/register`,
+  DOCUMENT_DOWNLOAD_ENDPOINT: '/files',
+  EXPENSES_APPROVE_ENDPOINT: `/expenses/approve`,
+  EXPENSES_ENDPOINT: `/expenses`,
+  EXPENSES_PAY_ENDPOINT: `/expenses/pay`,
+  EXPENSE_SAVE: `/expenses`,
+  FINANCE_CATEGORIES_ENDPOINT: '/transaction-categories',
+  GET_USER_PERMISSIONS: '/user-permissions',
   LOGIN: `/users/authenticate`,
   LOGOUT: `/users/logout`,
-  GET_USER_PERMISSIONS: '/user-permissions',
-  FINANCE_CATEGORIES_ENDPOINT: '/finance-categories',
-  EXPENSES_ENDPOINT: '/expenses',
-  DOCUMENT_DOWNLOAD_ENDPOINT: '/files',
+  REGISTER: `/users/register`,
 };
 
 export const EXPENSE_STATUS = {
@@ -13,3 +16,10 @@ export const EXPENSE_STATUS = {
   APPROVED: 'Approved',
   PAID: 'Paid',
 }
+
+export const EXPENSE_ACTION = {
+  APPROVE: 'Approve',
+  DELETE: 'Delete',
+  EDIT: 'Edit',
+  PAY: 'Pay',
+};

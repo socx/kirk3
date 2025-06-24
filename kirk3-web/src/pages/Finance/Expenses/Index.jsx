@@ -4,14 +4,16 @@ import {useNavigate, } from 'react-router-dom';
 
 import DeleteButton from '../../../components/DeleteButton';
 import ModalBasic from '../../../components/ModalBasic';
+import ModalBlank from '../../../components/ModalBlank';
 import Layout from '../../../components/PrivateLayout';
 import PaginationClassic from '../../../components/PaginationClassic';
 import SkeletonLoader from '../../../components/SkeletonLoader';
 
-import ExpensesTable from './ExpensesTable';
+import ExpenseActionConfirmation from './ExpenseActionConfirmation';
 import ExpenseForm from './ExpenseForm';
+import ExpensesTable from './ExpensesTable';
 
-import { API_ROUTES } from '../../../lib/constants';
+import { API_ROUTES, EXPENSE_ACTION } from '../../../lib/constants';
 import { axiosPrivate } from '../../../lib/axios';
 import useAuth from '../../../hooks/useAuth';
 
@@ -27,7 +29,7 @@ const TEAMS = [
 const Expenses = () => {
 
   const navigate = useNavigate();
-  const { auth, getToken } = useAuth();
+  const { auth, getToken, logout } = useAuth();
   const { id } = auth; 
 
   const defaultErrors = {
@@ -55,7 +57,10 @@ const Expenses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [expensesToShow, setExpensesToShow] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const [expenseAction, setExpenseAction] = useState('');
   const [createExpenseModalOpen, setCreateExpenseModalOpen] = useState(false);
+  const [expenseActionModalOpen, setExpenseActionModalOpen] = useState(false);
 
   const handleSelectedItems = (selectedItems) => {
     setSelectedItems([...selectedItems]);
@@ -110,7 +115,10 @@ const Expenses = () => {
         setExpenses(data.expenses);
       }
     } catch (error) {
-      throw error;
+      if (error.response.status === 401) {
+        logout();
+        navigate('/signin');
+      }
     }
     finally {
       setIsBusy(false);
@@ -119,6 +127,7 @@ const Expenses = () => {
 
   const onChangeInput = (e) => {
     const { id, value, } = e.target;
+    console.log({value, id});
     validateField(e.target);
     setCurrentExpense({ ...currentExpense, [id]: value });
   }
@@ -127,20 +136,11 @@ const Expenses = () => {
     try {
       event.preventDefault();
       setIsBusy(true);
-      const { expenseId, team, claimant, description, } = currentExpense;
+      event.stopPropagation();
 
-      if (validateForm()) {
-        const url = expenseId ? `${API_ROUTES.EXPENSES_ENDPOINT}/${expenseId}` : API_ROUTES.EXPENSES_ENDPOINT;
-        const response = expenseId
-          ? await axiosPrivate(getToken()?.accessToken).patch(url, {team, claimant, description})
-          : await axiosPrivate(getToken()?.accessToken).post(url, {team, claimant, description})
-        const data = response.data;
-
-        if (data && data.expense && data.expense.expenseId) {
-          setCurrentPage(1);
-          await refreshExpenses();
-          setCurrentExpense(defaultExpense);
-        }
+      if (currentExpense && currentExpense.description && currentExpense.team && currentExpense.team !== 'Select Team') {
+        console.log({currentExpense});
+        setCreateExpenseModalOpen(true);
       }
     } catch (err) {
       if (err.response.status === 401) {
@@ -151,16 +151,58 @@ const Expenses = () => {
     }
   }
 
-  const onEditItem = async (expenseId) => {
+  const handleExpenseAction  = async (expenseId, action) => {
     const item = expenses.find((i) => i.expenseId == expenseId);
     setCurrentExpense(item);
+    setExpenseAction(action);
+    switch (action.toLowerCase()) {
+      case 'approve': 
+        setExpenseActionModalOpen(true);
+        break
+      case 'pay':
+        setExpenseActionModalOpen(true);
+        break;
+      case 'edit':
+        setCreateExpenseModalOpen(true);
+        break;
+      case 'delete':
+        setExpenseActionModalOpen(true);
+        break;
+    }
   }
 
-  const onDeleteItem = async (expenseId) => {
-    const expense = expenses.find((i) => i.expenseId == expenseId);
+  const handleExpenseActionConfirm = async (e, action) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      console.log({currentExpense, action});
+      switch(action) {
+        case EXPENSE_ACTION.DELETE:
+          await axiosPrivate(accessToken).delete(`${API_ROUTES.EXPENSES_ENDPOINT}/${currentExpense.expenseId}`);
+          break;
+        case EXPENSE_ACTION.APPROVE:
+          await axiosPrivate(accessToken).patch(`${API_ROUTES.EXPENSES_APPROVE_ENDPOINT}/${currentExpense.expenseId}`);
+          break;
+        case EXPENSE_ACTION.PAY:
+          await axiosPrivate(accessToken).patch(`${API_ROUTES.EXPENSES_PAY_ENDPOINT}/${currentExpense.expenseId}`);
+          break;
+      }
+
+      setExpenseActionModalOpen(false);
+      setExpenseAction('');
+      setCurrentExpense(defaultExpense);
+      refreshExpenses();
+    } catch(err) {
+      console.log({err})
+      navigate('/signin');
+    }
+  }
+
+  const handleFormCancel = (e) => {
+    e.preventDefault();
     setCurrentExpense(defaultExpense);
-    await axiosPrivate(accessToken).delete(`${API_ROUTES.EXPENSES_ENDPOINT}/${expense.expenseId}`);
-    await refreshExpenses();
+    setExpenseActionModalOpen(false);
+    setCreateExpenseModalOpen(false);
   }
 
   const totalExpenses = expensesToShow && expensesToShow.length ? expensesToShow.length : 0;
@@ -171,12 +213,6 @@ const Expenses = () => {
     const lastIndex = firstIndex + itemsPerPage < totalExpenses ?  firstIndex + itemsPerPage - 1 : totalExpenses - 1;
     const items = []; for(let i = firstIndex; i <= lastIndex; i++) items.push(i);
     return expensesToShow.filter((expense, index) => index >= firstIndex && index <= lastIndex);
-  }
-
-  const onExpenseDateReady = () => {
-  }
-
-  const onExpenseDateChange = () => {
   }
 
   const onPreviousPageButtonClick = () => {
@@ -199,7 +235,6 @@ const Expenses = () => {
       }
       formData.append('description', expense.description);
       formData.append('team', expense.team);
-      // formData.append('expenseItems', JSON.stringify(expense.expenseItems));
       const expenseIms = [];
       for (const expenseItem of expenseItems) {
         formData.append('receipts', expenseItem.document[0]);
@@ -227,11 +262,6 @@ const Expenses = () => {
     } finally {
       setIsBusy(false);
     }
-  }
-
-  const handleFormCancel = (e) => {
-    e.preventDefault();
-    setCreateExpenseModalOpen(false);
   }
 
 
@@ -264,7 +294,7 @@ const Expenses = () => {
 
             <ModalBasic id="expense-modal" modalOpen={createExpenseModalOpen} setModalOpen={setCreateExpenseModalOpen} title="New Expenses">
               <ExpenseForm
-                currency={'PLN'}
+                currency={import.meta.env.VITE_DEFAULT_CURRENCY}
                 expense={currentExpense}
                 handleFormSubmit={handleFormSubmit}
                 handleFormCancel={handleFormCancel}
@@ -308,6 +338,16 @@ const Expenses = () => {
             {/* <DateSelect /> */}
             {/* Filter button */}
             {/* <FilterButton align="right" /> */}
+
+            <ModalBlank id="action-expense-modal" modalOpen={expenseActionModalOpen} setModalOpen={setExpenseActionModalOpen}>
+              <ExpenseActionConfirmation
+                currency={import.meta.env.VITE_DEFAULT_CURRENCY}
+                expense={{...currentExpense}}
+                expenseAction={expenseAction}
+                handleFormCancel={handleFormCancel}
+                handleExpenseActionConfirm={handleExpenseActionConfirm}
+              />
+            </ModalBlank>
           </div>
 
         </div>
@@ -325,6 +365,8 @@ const Expenses = () => {
                   id="description"
                   className="form-input w-full"
                   type="text"
+                  placeholder="Expense Description"
+                  maxLength={40}
                   required
                   value={currentExpense.description}
                   onChange={(e)=>onChangeInput(e)}
@@ -345,6 +387,7 @@ const Expenses = () => {
                   value={currentExpense.team}
                   onChange={(e)=>onChangeInput(e)}
                 >
+                  <option>Select Team</option>
                   {TEAMS.map(({name}, index) => {
                     return (
                       <option key={index}>{name}</option>
@@ -361,7 +404,7 @@ const Expenses = () => {
               <div>
                 <button
                   className="ml-4 w-1/2 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
-                  onClick={(e) => { e.stopPropagation(); setCreateExpenseModalOpen(true); }}
+                  onClick={onAddClick}
                 >
                     {currentExpense.currentExpenseId ? 'Update' : 'Add' }
                   </button>
@@ -379,6 +422,7 @@ const Expenses = () => {
           <ExpensesTable
             expenses={getCurrentPageExpenses()}
             selectedItems={handleSelectedItems}
+            handleExpenseAction={handleExpenseAction}
           />
         )}
 

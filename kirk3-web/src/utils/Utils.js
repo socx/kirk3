@@ -36,3 +36,9 @@ export const formatThousands = (value) => Intl.NumberFormat('en-US', {
 export const truncateString = (str, length) => {
   return `${str.substring(0, length)} ${str. length > length ? '...': ''}`;
 }
+
+export const toTitleCase = (str) => {
+  const arr = str.split(' ');
+  const titleCased = arr.map((item) => `${item.substring(0, 1).toUpperCase()}${item.substring(1, item.length)}`);
+  return titleCased.join(' ');
+}

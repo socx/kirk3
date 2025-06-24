@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
 import { truncateString } from '../../../utils/Utils';
-import { EXPENSE_STATUS } from '../../../lib/constants';
+import { EXPENSE_ACTION, EXPENSE_STATUS } from '../../../lib/constants';
+
+import Approve from '../../../images/icons/approve.svg';
+import Delete from '../../../images/icons/delete.svg';
+import Edit from '../../../images/icons/edit02.svg';
+import Pay from '../../../images/icons/money-blue.svg'
 
 
 const ExpensesTableItem = ({
@@ -18,6 +23,7 @@ const ExpensesTableItem = ({
   expenseItems,
   handleClick,
   isChecked,
+  handleExpenseAction
 }) => {
 
   const [expenseItemsOpen, setExpenseItemsOpen] = useState(false);
@@ -65,7 +71,7 @@ const ExpensesTableItem = ({
           <div className="font-medium text-gray-800 dark:text-gray-100">{claimant}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <div className="text-left font-medium text-green-600">{totalAmount}</div>
+          <div className="text-left font-medium text-green-600">{totalAmount.toFixed(2)}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <div className="text-left font-medium text-sky-600">{team}</div>
@@ -86,6 +92,58 @@ const ExpensesTableItem = ({
                 <path d="M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z" />
               </svg>
             </button>
+            {getExpenseStatus() === EXPENSE_STATUS.PENDING &&
+            <button
+              className="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
+              onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.EDIT); }}
+            >
+              <span className="sr-only">Edit</span>
+              <div className="flex items-center text-slate-800">
+                <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                  <img className="ml-1" src={Edit} width="27" height="27" title="edit expense" alt="edit expense" />
+                </div>
+              </div>
+            </button>
+            }
+            {getExpenseStatus() === EXPENSE_STATUS.PENDING &&
+              <button
+                className="text-rose-500 hover:text-rose-600 rounded-full"
+                onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.APPROVE); }}
+              >
+                <span className="sr-only">Approve</span>
+                <div className="flex items-center text-slate-800">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                    <img className="ml-1" src={Approve} width="27" height="27" title="approve expense" alt="approve expense" />
+                  </div>
+                </div>
+              </button>
+            }
+            {getExpenseStatus() === EXPENSE_STATUS.APPROVED &&
+              <button
+                className="text-rose-500 hover:text-rose-600 rounded-full"
+                onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.PAY); }}
+              >
+                <span className="sr-only">Pay</span>
+                <div className="flex items-center text-slate-800">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                    <img className="ml-1" src={Pay} width="27" height="27" title="pay expense" alt="pay expense" />
+                  </div>
+                </div>
+              </button>
+            }
+            {/* {permissions.includes(PERMISSIONS.DELETE_FINANCE_EXPENSES) && */}
+              <button
+                className="text-rose-500 hover:text-rose-600 rounded-full"
+                onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.DELETE); }}
+              >
+                <span className="sr-only">Delete</span>
+                <div className="flex items-center text-slate-800">
+                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                    <img className="ml-1" src={Delete} width="27" height="27" title="delete expense" alt="delete expense" />
+                  </div>
+                </div>
+              </button>
+            {/* } */}
           </div>
         </td>
       </tr>
