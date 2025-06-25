@@ -5,8 +5,6 @@ import { truncateString } from '../../../utils/Utils';
 import { EXPENSE_ACTION, EXPENSE_STATUS } from '../../../lib/constants';
 
 import Approve from '../../../images/icons/approve.svg';
-import Delete from '../../../images/icons/delete.svg';
-import Edit from '../../../images/icons/edit02.svg';
 import Pay from '../../../images/icons/money-blue.svg'
 
 
@@ -93,57 +91,49 @@ const ExpensesTableItem = ({
               </svg>
             </button>
             {getExpenseStatus() === EXPENSE_STATUS.PENDING &&
-            <button
-              className="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
-              onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.EDIT); }}
-            >
-              <span className="sr-only">Edit</span>
-              <div className="flex items-center text-slate-800">
-                <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
-                  <img className="ml-1" src={Edit} width="27" height="27" title="edit expense" alt="edit expense" />
-                </div>
-              </div>
-            </button>
+              <button
+                className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 bg-slate-50 dark:bg-slate-700 rounded-full mr-2 sm:mr-3"
+                onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.EDIT); }}
+              >
+                <span className="sr-only">Edit</span>
+                <svg className="w-10 h-10 fill-current" viewBox="0 0 32 32">
+                  <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                </svg>
+              </button>
             }
             {getExpenseStatus() === EXPENSE_STATUS.PENDING &&
               <button
-                className="text-rose-500 hover:text-rose-600 rounded-full"
+                className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full"
                 onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.APPROVE); }}
               >
                 <span className="sr-only">Approve</span>
-                <div className="flex items-center text-slate-800">
-                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
-                    <img className="ml-1" src={Approve} width="27" height="27" title="approve expense" alt="approve expense" />
-                  </div>
+                <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                  <img className="ml-1" src={Approve} width="20" height="20" title="approve expense" alt="approve expense" />
                 </div>
               </button>
             }
             {getExpenseStatus() === EXPENSE_STATUS.APPROVED &&
               <button
-                className="text-rose-500 hover:text-rose-600 rounded-full"
+                className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full "
                 onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.PAY); }}
               >
                 <span className="sr-only">Pay</span>
-                <div className="flex items-center text-slate-800">
-                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
-                    <img className="ml-1" src={Pay} width="27" height="27" title="pay expense" alt="pay expense" />
-                  </div>
+                <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
+                  <img className="ml-1" src={Pay} width="20" height="20" title="pay expense" alt="pay expense" />
                 </div>
               </button>
             }
-            {/* {permissions.includes(PERMISSIONS.DELETE_FINANCE_EXPENSES) && */}
-              <button
-                className="text-rose-500 hover:text-rose-600 rounded-full"
-                onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.DELETE); }}
-              >
-                <span className="sr-only">Delete</span>
-                <div className="flex items-center text-slate-800">
-                  <div className="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3">
-                    <img className="ml-1" src={Delete} width="27" height="27" title="delete expense" alt="delete expense" />
-                  </div>
-                </div>
-              </button>
-            {/* } */}
+            <button
+              className="text-red-500 hover:text-red-600 bg-slate-100 dark:bg-slate-700 rounded-full mr-2 sm:mr-3"
+              onClick={(e) => { e.stopPropagation(); handleExpenseAction(expenseId, EXPENSE_ACTION.DELETE); }}
+            >
+              <span className="sr-only">Delete</span>
+              <svg className="w-10 h-10 fill-current" viewBox="0 0 32 32">
+                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                <path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+              </svg>
+            </button>
+
           </div>
         </td>
       </tr>

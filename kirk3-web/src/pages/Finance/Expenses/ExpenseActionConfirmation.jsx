@@ -4,7 +4,7 @@ import { EXPENSE_STATUS, EXPENSE_ACTION }  from '../../../lib/constants';
 import  { toTitleCase } from '../../..//utils/Utils';
 
 import Image from '../../../images/transactions-image-04.svg';
-import Aprrove from '../../../images/icons/approve.svg';
+import Approve from '../../../images/icons/approve.svg';
 import Delete from '../../../images/icons/delete.svg';
 import Pay from '../../../images/icons/money-blue.svg';
 
@@ -27,7 +27,7 @@ const ExpenseActionConfirmation = ({
   const getIcon = () => {
     switch (expenseAction) {
       case EXPENSE_ACTION.APPROVE:
-        return Aprrove;
+        return Approve;
       case EXPENSE_ACTION.PAY:
         return Pay;
       case EXPENSE_ACTION.DELETE:
@@ -74,7 +74,7 @@ const ExpenseActionConfirmation = ({
                   <div className="mb-3 text-center">
                     <img className="inline-flex w-12 h-12 rounded-full -mt-6" src={getIcon(expenseAction)} width="48" height="48" alt="Transaction 04" />
                   </div>
-                  <div className="text-2xl font-semibold text-emerald-500 mb-1">{currency} {expense.totalAmount.toFixed(2)}</div>
+                  <div className="text-2xl font-semibold text-emerald-500 mb-1">{currency} {expense.totalAmount && expense.totalAmount.toFixed(2)}</div>
                   <div className="text-sm font-medium text-slate-800 dark:text-slate-100 mb-3">{dayjs(new Date(expense.createdAt)).format('DD MMM YYYY')}</div>
                   <div className={`inline-flex font-medium rounded-full text-center px-2.5 py-0.5 ${getStatusColor()}`}>{getExpenseStatus(expense)}</div>
                 </div>
