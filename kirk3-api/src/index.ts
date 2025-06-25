@@ -19,6 +19,7 @@ import { permissionRouter } from "./routes/permissionRoutes";
 import { userRouter } from "./routes/userRoutes";
 import { transactionCategoryRouter } from "./routes/transactionCategoryRoutes";
 import { teamRouter } from "./routes/teamRoutes";
+import { fileRouter } from "./routes/fileRoutes";
 
 
 dotenv.config();
@@ -66,6 +67,8 @@ app.use('/permissions', permissionRouter);
 app.use('/expenses', expenseRouter);
 app.use('/transaction-categories', transactionCategoryRouter);
 app.use('/teams', teamRouter);
+app.use('/downloads', fileRouter);
+  
 
 app.all('*', (req: Request, res: Response) => {
   res.status(404);
