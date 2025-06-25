@@ -1,5 +1,5 @@
 export const API_ROUTES = {
-  DOCUMENT_DOWNLOAD_ENDPOINT: '/files',
+  DOCUMENT_DOWNLOAD_ENDPOINT: '/downloads',
   EXPENSES_APPROVE_ENDPOINT: `/expenses/approve`,
   EXPENSES_ENDPOINT: `/expenses`,
   EXPENSES_PAY_ENDPOINT: `/expenses/pay`,

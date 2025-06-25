@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate, } from 'react-router-dom';
-
+import download from 'downloadjs'; 
 
 import DeleteButton from '../../../components/DeleteButton';
 import ModalBasic from '../../../components/ModalBasic';
@@ -155,20 +155,7 @@ const Expenses = () => {
     const item = expenses.find((i) => i.expenseId == expenseId);
     setCurrentExpense(item);
     setExpenseAction(action);
-    switch (action.toLowerCase()) {
-      case 'approve': 
-        setExpenseActionModalOpen(true);
-        break
-      case 'pay':
-        setExpenseActionModalOpen(true);
-        break;
-      case 'edit':
-        setCreateExpenseModalOpen(true);
-        break;
-      case 'delete':
-        setExpenseActionModalOpen(true);
-        break;
-    }
+    setExpenseActionModalOpen(true);
   }
 
   const handleExpenseActionConfirm = async (e, action) => {
@@ -187,7 +174,6 @@ const Expenses = () => {
           await axiosPrivate(accessToken).patch(`${API_ROUTES.EXPENSES_PAY_ENDPOINT}/${currentExpense.expenseId}`);
           break;
       }
-
       setExpenseActionModalOpen(false);
       setExpenseAction('');
       setCurrentExpense(defaultExpense);
@@ -203,6 +189,24 @@ const Expenses = () => {
     setCurrentExpense(defaultExpense);
     setExpenseActionModalOpen(false);
     setCreateExpenseModalOpen(false);
+  }
+
+  const handleFileDownload = async (fileName) => {
+    
+    try {
+      setIsBusy(true); 
+      const url = `${API_ROUTES.DOCUMENT_DOWNLOAD_ENDPOINT}/${fileName}`;
+      console.log({fileName, url})
+      const response = await axiosPrivate(accessToken, true).get(url);
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      download(blob, 'receipt-incovoice');
+    } catch (err) {
+      if (err.response.status === 401) { // TODO: establish if this is due to unauthorised or simply expired token
+        navigate('/signin');
+      }
+    } finally {
+      setIsBusy(false);
+    }
   }
 
   const totalExpenses = expensesToShow && expensesToShow.length ? expensesToShow.length : 0;
@@ -352,70 +356,73 @@ const Expenses = () => {
 
         </div>
 
+        {/* New Expense fields */}
+        { isBusy ? (
+          <SkeletonLoader type="rect" count={3} height={30} width={100} />
+        ) : (
+          <div className="space-y-8 mb-5">
 
-        <div className="space-y-8 mb-5">
 
+            <div className="grid gap-5 md:grid-cols-4">
 
-          <div className="grid gap-5 md:grid-cols-4">
-
-            <div>
-              {/* Start */}
               <div>
-                <input
-                  id="description"
-                  className="form-input w-full"
-                  type="text"
-                  placeholder="Expense Description"
-                  maxLength={40}
-                  required
-                  value={currentExpense.description}
-                  onChange={(e)=>onChangeInput(e)}
-                />
+                {/* Start */}
+                <div>
+                  <input
+                    id="description"
+                    className="form-input w-full"
+                    type="text"
+                    placeholder="Expense Description"
+                    maxLength={40}
+                    required
+                    value={currentExpense.description}
+                    onChange={(e)=>onChangeInput(e)}
+                  />
+                </div>
+                {errors.description &&
+                  <div className={`text-xs mt-1 text-red-500 ${errors.description ? 'hidden' : ''}`}>Error text goes here!</div>
+                }
+                {/* End */}
               </div>
-              {errors.description &&
-                <div className={`text-xs mt-1 text-red-500 ${errors.description ? 'hidden' : ''}`}>Error text goes here!</div>
-              }
-              {/* End */}
+
+              <div>
+                {/* Start */}
+                <div>
+                  <select
+                    id="team"
+                    className="form-select w-full"
+                    value={currentExpense.team}
+                    onChange={(e)=>onChangeInput(e)}
+                  >
+                    <option>Select Team</option>
+                    {TEAMS.map(({name}, index) => {
+                      return (
+                        <option key={index}>{name}</option>
+                      )
+                    })}
+                  </select>
+                </div>
+                {errors.team &&
+                  <div className={`text-xs mt-1 text-red-500 ${errors.team ? 'hidden' : ''}`}>Error text goes here!</div>
+                }
+                {/* End */}
+              </div>
+              
+                <div>
+                  <button
+                    className="ml-4 w-1/2 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
+                    onClick={onAddClick}
+                  >
+                      {currentExpense.currentExpenseId ? 'Update' : 'Add' }
+                    </button>
+                </div>
+
             </div>
-
-            <div>
-              {/* Start */}
-              <div>
-                <select
-                  id="team"
-                  className="form-select w-full"
-                  value={currentExpense.team}
-                  onChange={(e)=>onChangeInput(e)}
-                >
-                  <option>Select Team</option>
-                  {TEAMS.map(({name}, index) => {
-                    return (
-                      <option key={index}>{name}</option>
-                    )
-                  })}
-                </select>
-              </div>
-              {errors.team &&
-                <div className={`text-xs mt-1 text-red-500 ${errors.team ? 'hidden' : ''}`}>Error text goes here!</div>
-              }
-              {/* End */}
-            </div>
-            
-              <div>
-                <button
-                  className="ml-4 w-1/2 text-sm btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white"
-                  onClick={onAddClick}
-                >
-                    {currentExpense.currentExpenseId ? 'Update' : 'Add' }
-                  </button>
-              </div>
 
           </div>
+        )}
 
-        </div>
-
-
-
+        {/* Table of expense */}
         { isBusy ? (
           <SkeletonLoader type="rect" height={200} />
         ) : (
@@ -423,6 +430,7 @@ const Expenses = () => {
             expenses={getCurrentPageExpenses()}
             selectedItems={handleSelectedItems}
             handleExpenseAction={handleExpenseAction}
+            handleFileDownload={handleFileDownload}
           />
         )}
 

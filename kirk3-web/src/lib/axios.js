@@ -8,9 +8,15 @@ export default axios.create({
   baseURL: getBaseUrl()
 });
 
-export const  axiosPrivate = (accessToken) => {
-  return axios.create({
-    baseURL: getBaseUrl(),
-    headers: {'Authorization': `Bearer ${accessToken}`}
-  });
+export const  axiosPrivate = (accessToken, isFile=false) => {
+  return isFile ?
+    axios.create({
+      baseURL: getBaseUrl(),
+      headers: {'Authorization': `Bearer ${accessToken}`},
+      responseType: 'arraybuffer'
+    }):
+    axios.create({
+      baseURL: getBaseUrl(),
+      headers: {'Authorization': `Bearer ${accessToken}`}
+    });
 }

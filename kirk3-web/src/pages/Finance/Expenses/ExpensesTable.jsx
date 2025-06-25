@@ -5,7 +5,8 @@ import ExpensesTableItem from './ExpensesTableItem';
 const ExpensesTable = ({
   expenses,
   selectedItems,
-  handleExpenseAction
+  handleExpenseAction,
+  handleFileDownload,
 }) => {
 
   const [selectAll, setSelectAll] = useState(false);
@@ -102,6 +103,7 @@ const ExpensesTable = ({
                     handleClick={handleClick}
                     isChecked={isCheck.includes(expense.expenseId)}
                     handleExpenseAction={handleExpenseAction}
+                    handleFileDownload={handleFileDownload}
                   />
                 )
               })
