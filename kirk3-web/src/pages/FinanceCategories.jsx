@@ -17,7 +17,7 @@ const RECORDS_PER_PAGE = 6;
 const FinanceCategories = () => {
 
   const navigate = useNavigate();
-  const { getToken } = useAuth();
+  const { getToken, logout } = useAuth();
 
   const defaultErrors = {
     name: { message: '' },
@@ -46,7 +46,7 @@ const FinanceCategories = () => {
     const token = getToken().accessToken;
     setAccessToken(token);
     async function fetchFinanceCategories() {
-      await refreshFinanceCategories();
+      await refreshTransactionCategories();
     }
 
     fetchFinanceCategories();
@@ -82,17 +82,22 @@ const FinanceCategories = () => {
     return code.length && description.length && name.length;
   }
 
-  const refreshFinanceCategories = async () => {
+  const refreshTransactionCategories = async () => {
     try {
       setIsBusy(true);
-      const response = await axiosPrivate(accessToken).get(API_ROUTES.FINANCE_CATEGORIES_ENDPOINT);
+      const response = await axiosPrivate(getToken()?.accessToken).get(API_ROUTES.FINANCE_CATEGORIES_ENDPOINT);
       const data = response.data;
 
-      if (data && data.financeCategories) {
-        setFinanceCategories(data.financeCategories);
+      
+      if (data && data.transactionCategories) {
+        setFinanceCategories(data.transactionCategories);
       }
     } catch (error) {
-      throw error;
+      console.error('Error fetching finance categories:', error);
+      if (error.response && error.response.status === 401) {
+        logout();
+        navigate('/signin');
+      }
     }
     finally {
       setIsBusy(false);
@@ -118,9 +123,9 @@ const FinanceCategories = () => {
           : await axiosPrivate(accessToken).post(url, {code, name, description})
         const data = response.data;
 
-        if (data && data.financeCategory && data.financeCategory.id) {
+        if (data && data.transactionCategory && data.transactionCategory.id) {
           setCurrentPage(1);
-          await refreshFinanceCategories();
+          await refreshTransactionCategories();
           setCurrentCategory(defaultCategory);
         }
       }
@@ -142,7 +147,7 @@ const FinanceCategories = () => {
     const category = financeCategories.find((i) => i.id == id);
     setCurrentCategory(defaultCategory);
     await axiosPrivate(accessToken).delete(`${API_ROUTES.FINANCE_CATEGORIES_ENDPOINT}/${category.id}`);
-    await refreshFinanceCategories();
+    await refreshTransactionCategories();
   }
 
   const totalCategories = categoriesToShow && categoriesToShow.length ? categoriesToShow.length : 0;
@@ -163,7 +168,6 @@ const FinanceCategories = () => {
     let totalPages = Math.ceil(categoriesToShow.length/RECORDS_PER_PAGE);
     setCurrentPage(currentPage === totalPages ? currentPage : currentPage + 1);
   }
-
 
   return (
     <Layout>
@@ -244,6 +248,7 @@ const FinanceCategories = () => {
       </div>
     </Layout>
   );
+
 }
 
 export default FinanceCategories;
